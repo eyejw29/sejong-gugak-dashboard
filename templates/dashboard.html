@@ -195,10 +195,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-1
 
 <!-- ===== TAB 2: 신청 사업 진행 ===== -->
 <div class="tab-content" id="tab-applied">
-  <div class="section-title">📝 신청 완료 사업 — 진행 현황</div>
-  <p style="font-size:13px;color:var(--gray-500);margin-bottom:18px;">공고 카드에서 "신청 완료" 체크 시 이 탭에 자동 추가됩니다. 각 사업의 진행 상태를 관리할 수 있습니다.</p>
+  <div class="section-title">📝 신청 사업 — 진행 현황</div>
+  <p style="font-size:13px;color:var(--gray-500);margin-bottom:18px;">공고 카드에서 "신청예정" 체크 시 이 탭에 자동 추가됩니다. 각 단계를 클릭하여 진행 상태를 업데이트하세요.</p>
   <div id="applied-list"></div>
-  <div class="empty" id="applied-empty">아직 신청 완료한 사업이 없습니다.<br>월간 공고 탭에서 "신청 완료" 체크해보세요.</div>
+  <div class="empty" id="applied-empty">아직 등록된 사업이 없습니다.<br>월간 공고 탭에서 "신청예정" 체크해보세요.</div>
 </div>
 
 <!-- ===== TAB 3: 마감/종료 ===== -->
@@ -245,7 +245,7 @@ function setBid(id, val){ const b=getBids(); b[id]=val; localStorage.setItem('bi
 function getProgress(){ try{return JSON.parse(localStorage.getItem('progress')||'{}');}catch(e){return {};} }
 function setProgress(id, step){ const p=getProgress(); p[id]=step; localStorage.setItem('progress',JSON.stringify(p)); }
 
-const STEPS = ['공고확인','서류준비','신청완료','심사중','선정결과','사업수행','정산완료'];
+const STEPS = ['신청예정','서류준비','신청완료','심사중','선정결과'];
 
 // ===== DATA (auto-injected by build.py) =====
 const announcements = /*__ANNOUNCEMENTS_DATA__*/[];
@@ -323,7 +323,7 @@ function renderCard(a, showBid){
     ${showBid && !a.closed?`
     <div class="bid-check">
       <input type="checkbox" id="bid-${a.id}" ${isBid?'checked':''} onchange="toggleBid(${a.id})">
-      <label for="bid-${a.id}" ${isBid?'class="bid-done"':''}>${isBid?'✅ 신청 완료':'신청 완료 체크'}</label>
+      <label for="bid-${a.id}" ${isBid?'class="bid-done"':''}>${isBid?'✅ 신청예정 등록됨':'📌 신청예정 체크'}</label>
     </div>`:''}
   </div>`;
 }
@@ -354,7 +354,7 @@ function renderProgress(a){
 function toggleBid(id){
   const bids=getBids();
   setBid(id, !bids[id]);
-  if(!bids[id]) setProgress(id, 2); // 신청완료 단계로
+  if(!bids[id]) setProgress(id, 0); // 신청예정 단계로
   render();
 }
 
