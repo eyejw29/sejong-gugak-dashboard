@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세종국악관현악단 — 공고 모니터링</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--navy:#1B2A4A;--blue:#2E5090;--light-blue:#EBF2FF;--accent:#4A7FD4;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--orange:#F97316;--gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;--gray-300:#D1D5DB;--gray-500:#6B7280;--gray-700:#374151;--gray-900:#111827;}
+body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-100);color:var(--gray-900);line-height:1.6;}
+
+.header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:24px 32px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.2);}
+.header-top{display:flex;justify-content:space-between;align-items:center;}
+.header h1{font-size:21px;font-weight:700;}
+.header .date{font-size:13px;opacity:.8;}
+.header .sub{font-size:12px;opacity:.55;margin-top:3px;}
+
+.stats-bar{display:flex;gap:14px;padding:16px 32px;background:#fff;border-bottom:1px solid var(--gray-200);overflow-x:auto;}
+.stat{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:12px;background:var(--gray-50);border:1px solid var(--gray-200);min-width:120px;}
+.stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.stat-n{font-size:24px;font-weight:800;line-height:1;}
+.stat-l{font-size:11px;color:var(--gray-500);}
+
+.tabs{display:flex;background:#fff;border-bottom:2px solid var(--gray-200);padding:0 32px;overflow-x:auto;}
+.tab{padding:14px 22px;font-size:14px;font-weight:500;color:var(--gray-500);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;white-space:nowrap;display:flex;align-items:center;gap:7px;}
+.tab:hover{color:var(--blue);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700;}
+.tab .badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+
+.content{padding:24px 32px;max-width:1200px;}
+
+/* ===== MONTH NAV ===== */
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;background:#fff;padding:14px 22px;border-radius:14px;border:1px solid var(--gray-200);}
+.month-nav-center{display:flex;align-items:center;gap:12px;}
+.month-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--gray-300);background:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.month-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.month-label{font-size:18px;font-weight:700;color:var(--navy);min-width:140px;text-align:center;}
+.month-today{font-size:12px;padding:5px 14px;border-radius:20px;background:var(--blue);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:600;}
+.date-range{display:flex;align-items:center;gap:8px;font-size:13px;}
+.date-range input{padding:6px 12px;border:1px solid var(--gray-300);border-radius:8px;font-family:inherit;font-size:13px;}
+.date-range button{padding:6px 14px;border:none;background:var(--accent);color:#fff;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;}
+
+.section-title{font-size:16px;font-weight:700;color:var(--navy);margin:20px 0 14px;display:flex;align-items:center;gap:8px;}
+
+/* ===== CARD ===== */
+.card-list{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
+.card{background:#fff;border-radius:16px;border:1px solid var(--gray-200);transition:.2s;position:relative;overflow:hidden;}
+.card:hover{box-shadow:0 8px 28px rgba(0,0,0,.08);border-color:var(--accent);transform:translateY(-1px);}
+.card-bar{position:absolute;left:0;top:0;bottom:0;width:6px;}
+.bar-high{background:var(--green);} .bar-mid{background:var(--yellow);} .bar-low{background:var(--gray-300);}
+
+.card-top{padding:22px 26px 12px 26px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+.card-title{font-size:18px;font-weight:700;color:var(--gray-900);line-height:1.4;margin-bottom:4px;}
+.card-org{font-size:13px;color:var(--gray-500);}
+
+.dday-box{text-align:center;min-width:70px;padding:8px 14px;border-radius:12px;flex-shrink:0;}
+.dday-n{font-size:22px;font-weight:800;line-height:1.2;}
+.dday-l{font-size:10px;font-weight:500;margin-top:2px;}
+.dd-urgent{background:#FEE2E2;color:#DC2626;} .dd-soon{background:#FEF3C7;color:#D97706;} .dd-ok{background:#ECFDF5;color:#059669;} .dd-unknown{background:var(--gray-100);color:var(--gray-500);}
+
+/* 핵심 지표 3칸 */
+.card-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;margin:0 26px;border-radius:12px;overflow:hidden;border:1px solid var(--gray-200);}
+.metric{padding:14px 18px;background:var(--gray-50);border-right:1px solid var(--gray-200);}
+.metric:last-child{border-right:none;}
+.metric-label{font-size:11px;color:var(--gray-500);font-weight:600;letter-spacing:.4px;margin-bottom:4px;}
+.metric-val{font-size:15px;font-weight:700;line-height:1.3;}
+.metric-sub{font-size:12px;color:var(--gray-500);margin-top:3px;line-height:1.4;}
+.budget-big{color:var(--blue);font-size:17px;}
+.q-yes{color:#059669;} .q-maybe{color:#D97706;} .q-no{color:#DC2626;}
+
+.card-bottom{padding:12px 26px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.card-dates{display:flex;gap:18px;font-size:13px;color:var(--gray-500);}
+.card-dates strong{color:var(--gray-700);}
+.card-tags{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.card-note{padding:0 26px 16px;font-size:13px;color:var(--gray-500);line-height:1.5;}
+
+.tag{display:inline-block;padding:3px 10px;border-radius:7px;font-size:11px;font-weight:600;}
+.tag-v{background:#DCFCE7;color:#166534;} .tag-uv{background:#FEF3C7;color:#92400E;}
+.tag-type{background:#F3E8FF;color:#6B21A8;} .tag-closed{background:var(--gray-200);color:var(--gray-500);}
+.verify-src{font-size:11px;color:var(--gray-500);}
+.verify-src a{color:var(--accent);text-decoration:none;}
+
+.new-badge{position:absolute;top:12px;right:96px;background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:2px 10px;border-radius:6px;letter-spacing:.8px;}
+
+/* ===== 입찰 체크박스 ===== */
+.bid-check{display:flex;align-items:center;gap:8px;padding:0 26px 16px;}
+.bid-check input[type=checkbox]{width:20px;height:20px;cursor:pointer;accent-color:var(--blue);}
+.bid-check label{font-size:13px;font-weight:600;color:var(--gray-700);cursor:pointer;}
+.bid-check .bid-done{color:var(--green);font-weight:700;}
+
+/* ===== PROGRESS ===== */
+.progress-card{background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:22px 26px;margin-bottom:14px;}
+.progress-title{font-size:17px;font-weight:700;margin-bottom:4px;}
+.progress-org{font-size:13px;color:var(--gray-500);margin-bottom:14px;}
+.progress-bar-wrap{background:var(--gray-200);border-radius:10px;height:12px;overflow:hidden;margin-bottom:8px;}
+.progress-bar{height:100%;border-radius:10px;transition:width .3s;}
+.progress-steps{display:flex;gap:0;margin-bottom:12px;}
+.step{flex:1;text-align:center;padding:10px 4px;font-size:12px;font-weight:500;color:var(--gray-500);border-bottom:3px solid var(--gray-200);transition:.2s;}
+.step.done{color:var(--green);border-color:var(--green);font-weight:700;}
+.step.current{color:var(--blue);border-color:var(--blue);font-weight:700;background:var(--light-blue);border-radius:8px 8px 0 0;}
+.progress-meta{display:flex;gap:20px;font-size:13px;color:var(--gray-500);}
+.progress-meta strong{color:var(--gray-700);}
+
+/* filter, empty, guide, source */
+.filter-bar{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.fbtn{padding:7px 16px;border-radius:20px;border:1px solid var(--gray-300);background:#fff;font-size:13px;cursor:pointer;transition:.15s;font-family:inherit;color:var(--gray-700);}
+.fbtn:hover{border-color:var(--accent);color:var(--accent);}
+.fbtn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.empty{text-align:center;padding:44px;color:var(--gray-500);font-size:14px;}
+.tab-content{display:none;} .tab-content.active{display:block;}
+.guide{background:#FEF3C7;border:1px solid #FDE68A;border-radius:14px;padding:20px 24px;margin-top:24px;}
+.guide h3{font-size:14px;color:#92400E;margin-bottom:8px;} .guide p{font-size:13px;color:#78350F;line-height:1.8;}
+.src-card{background:#fff;border-radius:12px;padding:16px 22px;border:1px solid var(--gray-200);margin-bottom:10px;cursor:pointer;transition:.15s;}
+.src-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.06);}
+
+.legend{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray-500);}
+.legend-dot{width:12px;height:12px;border-radius:3px;}
+
+@media(max-width:768px){
+  .header,.stats-bar,.content{padding-left:16px;padding-right:16px;}
+  .tabs{padding:0 16px;}
+  .card-metrics{grid-template-columns:1fr;margin:0 18px;}
+  .metric{border-right:none;border-bottom:1px solid var(--gray-200);}
+  .metric:last-child{border-bottom:none;}
+  .card-top,.card-bottom,.card-note,.bid-check{padding-left:18px;padding-right:18px;}
+  .month-nav{flex-direction:column;gap:12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <h1>세종국악관현악단 공고 모니터링</h1>
+    <span class="date" id="today-date"></span>
+  </div>
+  <div class="sub">검증된 공고만 표시 · 출처 확인 필수</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-icon" style="background:#DCFCE7;">📋</div><div><div class="stat-n" id="s-total">0</div><div class="stat-l">접수중</div></div></div>
+  <div class="stat"><div class="stat-icon" style="background:#FEE2E2;">🔥</div><div><div class="stat-n" id="s-urgent">0</div><div class="stat-l">마감 임박</div></div></div>
+  <div class="stat"><div class="stat-icon" style="background:#E0E7FF;">✅</div><div><div class="stat-n" id="s-verified">0</div><div class="stat-l">검증 완료</div></div></div>
+  <div class="stat"><div class="stat-icon" style="background:#DBEAFE;">📝</div><div><div class="stat-n" id="s-bid">0</div><div class="stat-l">신청 완료</div></div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('monthly')">📅 월간 공고</div>
+  <div class="tab" onclick="switchTab('applied')">📝 신청 사업 <span class="badge" id="applied-badge">0</span></div>
+  <div class="tab" onclick="switchTab('closed')">📁 마감/종료</div>
+  <div class="tab" onclick="switchTab('sources')">🔗 소스</div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB 1: 월간 공고 ===== -->
+<div class="tab-content active" id="tab-monthly">
+  <div class="month-nav">
+    <div class="month-nav-center">
+      <button class="month-btn" onclick="changeMonth(-1)">◀</button>
+      <div class="month-label" id="month-label"></div>
+      <button class="month-btn" onclick="changeMonth(1)">▶</button>
+      <button class="month-today" onclick="goToday()">오늘</button>
+    </div>
+    <div class="date-range">
+      <input type="date" id="range-start">
+      <span>~</span>
+      <input type="date" id="range-end">
+      <button onclick="filterByRange()">조회</button>
+      <button onclick="clearRange()" style="background:var(--gray-500);">초기화</button>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div> 관련도 높음</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--yellow);"></div> 관련도 중간</div>
+    <div class="legend-item"><span class="tag tag-v" style="font-size:10px;">✅ 검증</span></div>
+    <div class="legend-item"><span class="tag tag-uv" style="font-size:10px;">⚠️ 확인필요</span></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="fbtn active" onclick="filterCards('all')">전체</button>
+    <button class="fbtn" onclick="filterCards('high')">관련도 높음</button>
+    <button class="fbtn" onclick="filterCards('verified')">검증완료</button>
+    <button class="fbtn" onclick="filterCards('단체')">단체 지원</button>
+  </div>
+
+  <div class="section-title" id="sec-urgent">🔴 마감 임박</div>
+  <div class="card-list" id="urgent-list"></div>
+  <div class="section-title">🟢 접수중</div>
+  <div class="card-list" id="ongoing-list"></div>
+</div>
+
+<!-- ===== TAB 2: 신청 사업 진행 ===== -->
+<div class="tab-content" id="tab-applied">
+  <div class="section-title">📝 신청 완료 사업 — 진행 현황</div>
+  <p style="font-size:13px;color:var(--gray-500);margin-bottom:18px;">공고 카드에서 "신청 완료" 체크 시 이 탭에 자동 추가됩니다. 각 사업의 진행 상태를 관리할 수 있습니다.</p>
+  <div id="applied-list"></div>
+  <div class="empty" id="applied-empty">아직 신청 완료한 사업이 없습니다.<br>월간 공고 탭에서 "신청 완료" 체크해보세요.</div>
+</div>
+
+<!-- ===== TAB 3: 마감/종료 ===== -->
+<div class="tab-content" id="tab-closed">
+  <div class="month-nav">
+    <div class="month-nav-center">
+      <button class="month-btn" onclick="changeClosedMonth(-1)">◀</button>
+      <div class="month-label" id="closed-month-label"></div>
+      <button class="month-btn" onclick="changeClosedMonth(1)">▶</button>
+    </div>
+  </div>
+  <div class="section-title">📁 마감 / 선정완료 (차기 공모 대비용)</div>
+  <div class="card-list" id="closed-list"></div>
+</div>
+
+<!-- ===== TAB 4: 소스 ===== -->
+<div class="tab-content" id="tab-sources">
+  <div class="section-title">📡 모니터링 소스</div>
+  <div id="source-list"></div>
+  <div class="guide" style="margin-top:20px;background:#EBF2FF;border-color:#BFDBFE;">
+    <h3 style="color:#1E40AF;">📱 카카오톡 알림 설정</h3>
+    <p style="color:#1E3A5F;">
+      <strong>1. 카카오 비즈니스 채널 (권장)</strong> — business.kakao.com → 채널 개설 → 장모님 친구추가 → 알림톡 연동<br>
+      <strong>2. 카카오 나에게 보내기</strong> — developers.kakao.com → REST API → 테스트 후 연동
+    </p>
+  </div>
+</div>
+
+</div>
+
+<script>
+const TODAY = new Date();
+const TODAY_STR = TODAY.toISOString().split('T')[0];
+document.getElementById('today-date').textContent = `${TODAY.getFullYear()}년 ${TODAY.getMonth()+1}월 ${TODAY.getDate()}일`;
+
+let currentMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+let closedMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+let rangeMode = false, rangeStart = null, rangeEnd = null;
+
+// ===== BID STATE (localStorage) =====
+function getBids(){ try{return JSON.parse(localStorage.getItem('bids')||'{}');}catch(e){return {};} }
+function setBid(id, val){ const b=getBids(); b[id]=val; localStorage.setItem('bids',JSON.stringify(b)); }
+// ===== APPLIED PROGRESS STATE =====
+function getProgress(){ try{return JSON.parse(localStorage.getItem('progress')||'{}');}catch(e){return {};} }
+function setProgress(id, step){ const p=getProgress(); p[id]=step; localStorage.setItem('progress',JSON.stringify(p)); }
+
+const STEPS = ['공고확인','서류준비','신청완료','심사중','선정결과','사업수행','정산완료'];
+
+// ===== DATA =====
+const announcements = [
+  {
+    id:1, title:"2026 예술활동준비금 지원사업",
+    org:"한국예술인복지재단", type:"복지/활동비", target:"개인 (예술인등록증)",
+    deadline:"2026-04-17", deadlineDate:"2026-04-17", openDate:"2026-03-23",
+    relevance:"mid", verified:true,
+    verifySource:"kawf.kr + 아시아경제 3/20", verifyUrl:"https://www.kawf.kr",
+    qualification:"예술인등록증 완료, 중위소득 120% 이하",
+    qualifyFit:"maybe", budget:"1인당 300만원", budgetScale:"540억원 (18,000명)",
+    note:"단원 개인 지원. 소득 기준 확인 필요", tags:["개인"], closed:false
+  },
+  {
+    id:2, title:"2026 대표공연 콘텐츠 지역유통 지원사업",
+    org:"문화체육관광부 / 예술경영지원센터", type:"공연유통", target:"단체 (공연단체+시설)",
+    deadline:"2026-03-30 (추정)", deadlineDate:"2026-03-30", openDate:"2026-02-09",
+    relevance:"high", verified:false,
+    verifySource:"파이낸셜뉴스 2/9 기사", verifyUrl:"https://www.fnnews.com/news/202602091127387656",
+    qualification:"국악 포함 공연단체, 공공·민간 불문", qualifyFit:"yes",
+    budget:"확인필요", budgetScale:"지역유통 지원금",
+    note:"국악 28개 작품 포함. gokams.or.kr 직접 확인 권장", tags:["공연","단체"], closed:false
+  },
+  {
+    id:3, title:"2026 K-arts on the GO 2차 (해외 초청 공연전시 지원)",
+    org:"한국국제문화교류진흥원", type:"국제교류", target:"단체 (해외 초청)",
+    deadline:"2026-03-30 (추정)", deadlineDate:"2026-03-30", openDate:"2026-03-10",
+    relevance:"mid", verified:false,
+    verifySource:"아트누리 3/30 + 2025년 2차 일정 참고", verifyUrl:"https://k-go.or.kr",
+    qualification:"해외 우수 플랫폼 초청받은 단체", qualifyFit:"maybe",
+    budget:"항공료·운송료 지원", budgetScale:"건별",
+    note:"해외 초청 있는 경우만 해당", tags:["국제","단체"], closed:false
+  },
+  {
+    id:4, title:"2026 경기 공연예술어워즈 참가작품 모집",
+    org:"(재)경기아트센터", type:"공연/축제", target:"단체 (전통예술 포함)",
+    deadline:"2026-03-31", deadlineDate:"2026-03-31", openDate:"2026-03-24",
+    relevance:"mid", verified:false,
+    verifySource:"아트누리 3/31 표시", verifyUrl:"https://artnuri.or.kr",
+    qualification:"연극·뮤지컬·무용·음악·전통예술, 전국 참가 가능", qualifyFit:"yes",
+    budget:"확인필요", budgetScale:"어워즈 지원",
+    note:"전통예술 부문 포함. 경기 행사이나 전국 단체 가능", tags:["공연","단체"], closed:false
+  },
+  // ===== 마감 (참고용) =====
+  {
+    id:101, title:"2026 문예진흥기금 지원사업 (26개 사업, 613억)",
+    org:"한국문화예술위원회", type:"창작/공연/교육", target:"단체/개인",
+    deadline:"2025-10월 마감", deadlineDate:null, openDate:"2025-09",
+    relevance:"high", verified:true,
+    verifySource:"arko.or.kr 공식", verifyUrl:"https://www.arko.or.kr/content/6123",
+    qualification:"전통예술 활성화 등 세부사업별 상이", qualifyFit:"yes",
+    budget:"총 613억원 (26개 사업)", budgetScale:"613억원",
+    note:"접수 2025년 9~10월 완료. 차기(2027) 공모 9월경 대비", tags:["창작","공연"], closed:true
+  },
+  {
+    id:102, title:"2026 지역대표예술단체 지원사업 (전통 11개, 최대 20억/단체)",
+    org:"문화체육관광부", type:"공연/창작", target:"단체",
+    deadline:"선정완료", deadlineDate:null, openDate:"2025-12",
+    relevance:"high", verified:true,
+    verifySource:"mcst.go.kr + 다수 언론", verifyUrl:"https://www.mcst.go.kr/site/s_notice/notice/noticeView.jsp?pSeq=18920",
+    qualification:"광역·기초 지자체 소속 공연예술단체 (서울 제외)", qualifyFit:"yes",
+    budget:"단체당 최대 20억 (총 145억)", budgetScale:"145억원",
+    note:"전통 11개 선정. 차기 2026년 하반기 대비", tags:["공연","단체"], closed:true
+  },
+  {
+    id:103, title:"2026 신나는국악여행 공연단체 모집",
+    org:"예술경영지원센터 / 서울시", type:"공연", target:"단체",
+    deadline:"2026-02월 마감", deadlineDate:null, openDate:"2026-01",
+    relevance:"high", verified:true,
+    verifySource:"은재님 직접 확인", verifyUrl:"https://www.gokams.or.kr",
+    qualification:"국악 공연단체", qualifyFit:"yes",
+    budget:"확인필요", budgetScale:"-",
+    note:"매년 1월 모집. 차기 2027년 1월 대비", tags:["공연","단체"], closed:true
+  },
+  {
+    id:104, title:"세종시문화관광재단 2026 예술지원사업 (7.4억)",
+    org:"세종시문화관광재단", type:"창작/공연", target:"단체/개인",
+    deadline:"2026-01-27 마감", deadlineDate:null, openDate:"2026-01-13",
+    relevance:"high", verified:true,
+    verifySource:"inews365 기사", verifyUrl:"https://www.sjcf.or.kr",
+    qualification:"세종시 소재 예술단체/개인", qualifyFit:"yes",
+    budget:"7.4억원", budgetScale:"7.4억원",
+    note:"매년 1월 공모. 차기 2027년 1월 대비", tags:["창작","단체"], closed:true
+  },
+  {
+    id:105, title:"세종시 공연장상주단체 육성지원 (8,700만원/단체)",
+    org:"세종시문화관광재단", type:"상주단체", target:"단체",
+    deadline:"2026-01-13 마감", deadlineDate:null, openDate:"2025-12-30",
+    relevance:"high", verified:true,
+    verifySource:"goodmorningcc 기사", verifyUrl:"https://www.sjcf.or.kr",
+    qualification:"세종시 공연장 상주 희망 단체 (2단체)", qualifyFit:"yes",
+    budget:"단체당 8,700만원", budgetScale:"1.74억원",
+    note:"차기 2026년 12월 대비", tags:["공연","단체"], closed:true
+  },
+  {
+    id:106, title:"국립예술단체 청년 교육단원 모집 (전통 165명)",
+    org:"문체부 / 국립국악원", type:"인력양성", target:"개인 (청년)",
+    deadline:"2026-01-20 마감", deadlineDate:null, openDate:"2026-01-05",
+    relevance:"mid", verified:true,
+    verifySource:"헤럴드경제 기사", verifyUrl:"https://www.gugak.go.kr",
+    qualification:"만 19~34세, 전통예술 전공/경력", qualifyFit:"maybe",
+    budget:"교육비+활동비", budgetScale:"-",
+    note:"차기 2027년 1월 대비", tags:["교육","개인"], closed:true
+  }
+];
+
+const sources = [
+  {name:"아트누리",url:"artnuri.or.kr",type:"1순위·통합",note:"120개 기관. 전통예술+단체+진행중 필터"},
+  {name:"한국문화예술위원회",url:"arko.or.kr",type:"2순위·핵심",note:"대형 사업. 매년 9~10월 접수"},
+  {name:"예술경영지원센터",url:"gokams.or.kr",type:"2순위·핵심",note:"대표공연유통, 신나는국악여행"},
+  {name:"국립국악원",url:"gugak.go.kr",type:"2순위·국악",note:"국악 전문"},
+  {name:"전통공연예술진흥재단",url:"kotpa.org",type:"2순위·전통",note:"전통예술 특화"},
+  {name:"세종시문화관광재단",url:"sjcf.or.kr",type:"3순위·지역",note:"소재지. 매년 1월"},
+  {name:"e나라도움",url:"gosims.go.kr",type:"3순위·보조금",note:"키워드 검색"},
+  {name:"문화체육관광부",url:"mcst.go.kr",type:"3순위·정부",note:"정책사업"},
+];
+
+// ===== HELPERS =====
+function getDday(d){if(!d)return null;return Math.ceil((new Date(d)-TODAY)/(864e5));}
+function ddayBox(d){
+  const dd=getDday(d);
+  if(dd===null) return '<div class="dday-box dd-unknown"><div class="dday-n">—</div><div class="dday-l">확인필요</div></div>';
+  if(dd<0) return '<div class="dday-box dd-urgent"><div class="dday-n">마감</div><div class="dday-l">종료</div></div>';
+  if(dd<=5) return `<div class="dday-box dd-urgent"><div class="dday-n">D-${dd}</div><div class="dday-l">마감임박</div></div>`;
+  if(dd<=14) return `<div class="dday-box dd-soon"><div class="dday-n">D-${dd}</div><div class="dday-l">접수중</div></div>`;
+  return `<div class="dday-box dd-ok"><div class="dday-n">D-${dd}</div><div class="dday-l">접수중</div></div>`;
+}
+function qClass(f){return f==='yes'?'q-yes':f==='maybe'?'q-maybe':'q-no';}
+function qLabel(f){return f==='yes'?'✅ 지원 가능':f==='maybe'?'⚠️ 조건부':'❌ 해당없음';}
+function inMonth(a, m){
+  const dl = a.deadlineDate ? new Date(a.deadlineDate) : (a.openDate ? new Date(a.openDate) : null);
+  if(!dl) return true;
+  return dl.getFullYear()===m.getFullYear() && dl.getMonth()===m.getMonth();
+}
+function inRange(a){
+  if(!rangeMode) return true;
+  const dl = a.deadlineDate || a.openDate;
+  if(!dl) return true;
+  const d = new Date(dl);
+  return d >= rangeStart && d <= rangeEnd;
+}
+function monthStr(m){return `${m.getFullYear()}년 ${m.getMonth()+1}월`;}
+
+// ===== RENDER CARD =====
+function renderCard(a, showBid){
+  const bids = getBids();
+  const isBid = bids[a.id] || false;
+  const barCls = a.relevance==='high'?'bar-high':a.relevance==='mid'?'bar-mid':'bar-low';
+  const vTag = a.verified?'<span class="tag tag-v">✅ 검증</span>':'<span class="tag tag-uv">⚠️ 확인필요</span>';
+
+  return `
+  <div class="card" data-relevance="${a.relevance}" data-verified="${a.verified}" data-target="${a.target}" data-id="${a.id}">
+    <div class="card-bar ${barCls}"></div>
+    <div class="card-top">
+      <div>
+        <div class="card-title">${a.title}</div>
+        <div class="card-org">🏛 ${a.org}</div>
+      </div>
+      ${a.closed?'':ddayBox(a.deadlineDate)}
+    </div>
+    <div class="card-metrics">
+      <div class="metric">
+        <div class="metric-label">자격요건</div>
+        <div class="metric-val ${qClass(a.qualifyFit)}">${qLabel(a.qualifyFit)}</div>
+        <div class="metric-sub">${a.qualification}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">지원 예산</div>
+        <div class="metric-val budget-big">${a.budget}</div>
+        <div class="metric-sub">${a.budgetScale}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">지원 대상</div>
+        <div class="metric-val">${a.target}</div>
+        <div class="metric-sub"><span class="tag tag-type">${a.type}</span></div>
+      </div>
+    </div>
+    <div class="card-bottom">
+      <div class="card-dates">
+        <span>📝 공고: <strong>${a.openDate}</strong></span>
+        <span>📅 마감: <strong style="${a.deadlineDate&&getDday(a.deadlineDate)<=5?'color:#DC2626;':''}">${a.deadline}</strong></span>
+      </div>
+      <div class="card-tags">${vTag} <span class="verify-src">📎 <a href="${a.verifyUrl}" target="_blank">${a.verifySource}</a></span></div>
+    </div>
+    ${a.note?`<div class="card-note">💡 ${a.note}</div>`:''}
+    ${showBid && !a.closed?`
+    <div class="bid-check">
+      <input type="checkbox" id="bid-${a.id}" ${isBid?'checked':''} onchange="toggleBid(${a.id})">
+      <label for="bid-${a.id}" ${isBid?'class="bid-done"':''}>${isBid?'✅ 신청 완료':'신청 완료 체크'}</label>
+    </div>`:''}
+  </div>`;
+}
+
+function renderProgress(a){
+  const prog = getProgress();
+  const step = prog[a.id] || 0;
+  const pct = Math.round((step/( STEPS.length-1))*100);
+  const colors = ['#E5E7EB','#FEF3C7','#DBEAFE','#E0E7FF','#FEF3C7','#DCFCE7','#10B981'];
+
+  return `
+  <div class="progress-card">
+    <div class="progress-title">${a.title}</div>
+    <div class="progress-org">🏛 ${a.org} · ${a.type}</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%;background:${pct===100?'var(--green)':'var(--blue)'};"></div></div>
+    <div class="progress-steps">
+      ${STEPS.map((s,i) => `<div class="step ${i<step?'done':i===step?'current':''}" onclick="updateProgress(${a.id},${i})" style="cursor:pointer;" title="클릭하여 이 단계로 설정">${i<step?'✅ ':''}${s}</div>`).join('')}
+    </div>
+    <div class="progress-meta">
+      <span>진행률: <strong>${pct}%</strong></span>
+      <span>현재: <strong>${STEPS[step]}</strong></span>
+      <span>예산: <strong>${a.budget}</strong></span>
+    </div>
+  </div>`;
+}
+
+// ===== ACTIONS =====
+function toggleBid(id){
+  const bids=getBids();
+  setBid(id, !bids[id]);
+  if(!bids[id]) setProgress(id, 2); // 신청완료 단계로
+  render();
+}
+
+function updateProgress(id, step){
+  setProgress(id, step);
+  render();
+}
+
+function changeMonth(d){ currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth()+d, 1); rangeMode=false; render(); }
+function changeClosedMonth(d){ closedMonth = new Date(closedMonth.getFullYear(), closedMonth.getMonth()+d, 1); render(); }
+function goToday(){ currentMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1); rangeMode=false; render(); }
+
+function filterByRange(){
+  const s=document.getElementById('range-start').value;
+  const e=document.getElementById('range-end').value;
+  if(!s||!e){alert('시작일과 종료일을 모두 선택하세요.');return;}
+  rangeMode=true; rangeStart=new Date(s); rangeEnd=new Date(e);
+  render();
+}
+function clearRange(){ rangeMode=false; render(); }
+
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+}
+
+function filterCards(f){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('#tab-monthly .card').forEach(c=>{
+    if(f==='all') c.style.display='';
+    else if(f==='high') c.style.display=c.dataset.relevance==='high'?'':'none';
+    else if(f==='verified') c.style.display=c.dataset.verified==='true'?'':'none';
+    else if(f==='단체') c.style.display=c.dataset.target.includes('단체')?'':'none';
+  });
+}
+
+// ===== MAIN RENDER =====
+function render(){
+  document.getElementById('month-label').textContent = rangeMode
+    ? `${rangeStart.toLocaleDateString('ko')} ~ ${rangeEnd.toLocaleDateString('ko')}`
+    : monthStr(currentMonth);
+  document.getElementById('closed-month-label').textContent = monthStr(closedMonth);
+
+  const active = announcements.filter(a=>!a.closed);
+  const filtered = active.filter(a => rangeMode ? inRange(a) : inMonth(a, currentMonth));
+  const urgent = filtered.filter(a=>{const d=getDday(a.deadlineDate);return d!==null&&d>=0&&d<=7;});
+  const ongoing = filtered.filter(a=>!urgent.includes(a));
+
+  document.getElementById('urgent-list').innerHTML = urgent.length?urgent.map(a=>renderCard(a,true)).join(''):'<div class="empty">마감 임박 공고가 없습니다</div>';
+  document.getElementById('sec-urgent').style.display = urgent.length?'':'none';
+  document.getElementById('ongoing-list').innerHTML = ongoing.length?ongoing.map(a=>renderCard(a,true)).join(''):'<div class="empty">이 기간에 해당하는 접수중 공고가 없습니다</div>';
+
+  // Closed
+  const closedFiltered = announcements.filter(a=>a.closed).filter(a=>inMonth(a, closedMonth));
+  document.getElementById('closed-list').innerHTML = closedFiltered.length?closedFiltered.map(a=>renderCard(a,false)).join(''):'<div class="empty">이 월에 해당하는 마감 공고가 없습니다</div>';
+
+  // Applied (bid)
+  const bids = getBids();
+  const applied = active.filter(a=>bids[a.id]);
+  document.getElementById('applied-list').innerHTML = applied.map(renderProgress).join('');
+  document.getElementById('applied-empty').style.display = applied.length?'none':'';
+  document.getElementById('applied-badge').textContent = applied.length;
+
+  // Stats
+  document.getElementById('s-total').textContent = active.length;
+  document.getElementById('s-urgent').textContent = active.filter(a=>{const d=getDday(a.deadlineDate);return d!==null&&d>=0&&d<=7;}).length;
+  document.getElementById('s-verified').textContent = active.filter(a=>a.verified).length;
+  document.getElementById('s-bid').textContent = applied.length;
+
+  // Range inputs
+  if(!rangeMode){
+    document.getElementById('range-start').value='';
+    document.getElementById('range-end').value='';
+  }
+}
+
+render();
+</script>
+</body>
+</html>
