@@ -273,17 +273,6 @@ let rangeMode = false, rangeStart = null, rangeEnd = null;
 let searchQuery = '';
 let currentFilter = 'all';
 
-// ===== AUTO-CLOSE: 마감일 지난 공고 자동 감지 =====
-announcements.forEach(a => {
-  if(!a.closed && a.deadlineDate) {
-    const dd = Math.ceil((new Date(a.deadlineDate) - TODAY) / 864e5);
-    if(dd < -1) a._autoExpired = true;
-  }
-});
-
-// ===== UPDATE TIMESTAMP =====
-document.getElementById('update-info').textContent = '마지막 업데이트: ' + TODAY.toLocaleString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-
 // ===== BID STATE (localStorage) =====
 function getBids(){ try{return JSON.parse(localStorage.getItem('bids')||'{}');}catch(e){return {};} }
 function setBid(id, val){ const b=getBids(); b[id]=val; localStorage.setItem('bids',JSON.stringify(b)); }
@@ -632,6 +621,17 @@ const sources = [
     "note": "정책사업"
   }
 ];
+
+// ===== AUTO-CLOSE: 마감일 지난 공고 자동 감지 =====
+announcements.forEach(a => {
+  if(!a.closed && a.deadlineDate) {
+    const dd = Math.ceil((new Date(a.deadlineDate) - TODAY) / 864e5);
+    if(dd < -1) a._autoExpired = true;
+  }
+});
+
+// ===== UPDATE TIMESTAMP =====
+document.getElementById('update-info').textContent = '마지막 업데이트: ' + TODAY.toLocaleString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 
 // ===== HELPERS =====
 function getDday(d){if(!d)return null;return Math.ceil((new Date(d)-TODAY)/(864e5));}
