@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세종국악 공고알림 - 카카오 로그인</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Malgun Gothic', sans-serif; background: #f5f6f8; min-height: 100vh; }
+.header { background: #2c3e6b; color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 18px; }
+.header .user-info { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.header .user-info .avatar { width: 32px; height: 32px; background: #FEE500; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.container { max-width: 800px; margin: 24px auto; padding: 0 16px; }
+.card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
+.card-header h2 { font-size: 16px; color: #333; }
+.card-body { padding: 20px; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.badge-success { background: #d4edda; color: #155724; }
+.badge-kakao { background: #FEE500; color: #3C1E1E; }
+
+/* Login section */
+.login-section { text-align: center; padding: 40px 20px; }
+.login-section .icon { font-size: 48px; margin-bottom: 16px; }
+.login-section h2 { font-size: 20px; color: #333; margin-bottom: 8px; }
+.login-section p { color: #888; font-size: 14px; margin-bottom: 24px; }
+.kakao-btn { display: inline-flex; align-items: center; gap: 8px; background: #FEE500; color: #3C1E1E; border: none; padding: 12px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.kakao-btn svg { width: 20px; height: 20px; }
+
+/* Friend list */
+.friend-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+.friend-item:last-child { border-bottom: none; }
+.friend-avatar { width: 44px; height: 44px; background: #FEE500; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 14px; flex-shrink: 0; }
+.friend-info { flex: 1; }
+.friend-name { font-size: 15px; font-weight: 600; color: #333; }
+.friend-status { font-size: 12px; color: #888; margin-top: 2px; }
+.friend-action { display: flex; gap: 8px; }
+.btn-msg { background: #FEE500; color: #3C1E1E; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-msg.sent { background: #d4edda; color: #155724; }
+
+/* Message log */
+.msg-log { background: #f8f9fa; border-radius: 8px; padding: 14px; margin-top: 12px; }
+.msg-log-item { display: flex; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #e9ecef; font-size: 13px; }
+.msg-log-item:last-child { border-bottom: none; }
+.msg-time { color: #888; min-width: 140px; flex-shrink: 0; }
+.msg-content { color: #333; flex: 1; }
+.msg-status { color: #155724; font-weight: 600; min-width: 60px; text-align: right; }
+
+/* Scope info */
+.scope-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.scope-tag { background: #e8f4f8; color: #0c5460; padding: 4px 10px; border-radius: 4px; font-size: 12px; }
+
+.section-label { font-size: 13px; color: #888; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.login-complete { display: flex; align-items: center; gap: 8px; color: #155724; font-size: 14px; }
+.login-complete svg { color: #28a745; }
+</style>
+</head>
+<body>
+
+<!-- Header with logged-in user -->
+<div class="header">
+    <h1>🎵 세종국악관현악단 공고알림</h1>
+    <div class="user-info">
+        <span>eyejw29@kakao.com</span>
+        <div class="avatar">👤</div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Card 1: 카카오 로그인 상태 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>🔐 카카오 로그인</h2>
+            <span class="badge badge-success">✓ 로그인 완료</span>
+        </div>
+        <div class="card-body">
+            <div class="login-complete">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#28a745"/>
+                    <path d="M6 10l3 3 5-5" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+                <span>카카오계정으로 로그인되었습니다.</span>
+            </div>
+            <div style="margin-top: 12px;">
+                <div class="section-label">동의한 권한</div>
+                <div class="scope-list">
+                    <span class="scope-tag">🔑 카카오 로그인</span>
+                    <span class="scope-tag">👥 친구 목록 (friends)</span>
+                    <span class="scope-tag">💬 메시지 전송 (talk_message)</span>
+                </div>
+            </div>
+            <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="background: #FEE500; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.83 1.88 5.31 4.7 6.72-.16.57-.58 2.08-.67 2.4-.1.38.14.38.3.27.12-.08 1.94-1.32 2.73-1.86.62.09 1.26.14 1.94.14 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600; color: #333;">카카오 로그인 버튼</div>
+                        <div style="font-size: 11px; color: #888;">로그인 전 화면에서 표시됩니다</div>
+                    </div>
+                    <button class="kakao-btn" style="margin-left: auto; padding: 8px 16px; font-size: 13px;" disabled>카카오 로그인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2: 카카오톡 친구 목록 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>👥 카카오톡 친구 목록</h2>
+            <span class="badge badge-kakao">1명</span>
+        </div>
+        <div class="card-body">
+            <div class="section-label">API: GET /v1/api/talk/friends</div>
+            <div class="friend-item">
+                <div class="friend-avatar">👩</div>
+                <div class="friend-info">
+                    <div class="friend-name">장모님 김혜성</div>
+                    <div class="friend-status">메시지 수신 허용 ✓ | 세종국악관현악단 대표</div>
+                </div>
+                <div class="friend-action">
+                    <button class="btn-msg sent">✓ 발송완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: 메시지 발송 기록 -->
+    <div class="card">
+        <div class="card-header">
+            <h2>💬 카카오톡 메시지 발송</h2>
+            <span class="badge badge-success">정상 동작</span>
+        </div>
+        <div class="card-body">
+            <div class="section-label">API: POST /v1/api/talk/friends/message/default/send</div>
+            <div class="msg-log">
+                <div class="msg-log-item">
+                    <span class="msg-time">2026-03-26 19:15</span>
+                    <span class="msg-content">[세종국악 공고알림] 테스트 메시지입니다. 카카오톡 친구 메시지 기능이 정상 작동합니다.</span>
+                    <span class="msg-status">✓ 성공</span>
+                </div>
+                <div class="msg-log-item">
+                    <span class="msg-time">수신자</span>
+                    <span class="msg-content">장모님 김혜성 (uuid: xv7L_cX2x...)</span>
+                    <span class="msg-status">✓ 수신</span>
+                </div>
+            </div>
+            <div style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px; font-size: 13px; color: #856404;">
+                ℹ️ 매일 아침 9시, 새 공고 감지 시 위 친구에게 자동으로 알림 메시지가 발송됩니다.
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
