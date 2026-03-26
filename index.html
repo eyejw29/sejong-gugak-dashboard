@@ -118,6 +118,7 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-1
 .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--gray-500);}
 .legend-dot{width:12px;height:12px;border-radius:3px;}
 
+
 /* ===== ACTION SUMMARY ===== */
 .action-summary{padding:16px 32px;background:#fff;border-bottom:1px solid var(--gray-200);}
 .action-title{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
@@ -132,25 +133,20 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-1
 .action-chip .chip-count{font-size:20px;font-weight:800;line-height:1;}
 .action-chip .chip-label{font-size:12px;line-height:1.3;}
 .action-none{font-size:13px;color:var(--gray-500);padding:8px 0;}
-
 /* ===== ANNUAL CALENDAR ===== */
 .calendar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px;}
 .cal-month{background:#fff;border-radius:14px;border:1px solid var(--gray-200);padding:16px;transition:.15s;min-height:120px;}
 .cal-month:hover{box-shadow:0 4px 16px rgba(0,0,0,.06);}
 .cal-month.current{border-color:var(--blue);box-shadow:0 0 0 2px rgba(46,80,144,.15);}
-.cal-month-header{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
-.cal-month-num{font-size:12px;color:var(--gray-500);font-weight:400;}
+.cal-month-header{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px;}
 .cal-event{font-size:12px;padding:6px 10px;border-radius:8px;margin-bottom:6px;line-height:1.4;display:flex;align-items:flex-start;gap:6px;}
 .cal-event-past{background:var(--gray-50);color:var(--gray-500);}
 .cal-event-active{background:#DCFCE7;color:#166534;font-weight:600;}
 .cal-event-predicted{background:#EBF2FF;color:var(--blue);border:1px dashed var(--accent);}
-.cal-event .cal-badge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.cal-badge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
 .cal-badge-closed{background:var(--gray-200);color:var(--gray-500);}
 .cal-badge-open{background:#DCFCE7;color:#166534;}
 .cal-badge-predict{background:#DBEAFE;color:var(--blue);}
-.cal-legend{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
-.cal-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-500);}
-.cal-legend-dot{width:14px;height:14px;border-radius:4px;}
 
 @media(max-width:768px){
   .header,.stats-bar,.content{padding-left:16px;padding-right:16px;}
@@ -162,7 +158,6 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-1
   .month-nav{flex-direction:column;gap:12px;}
   .calendar-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
   .action-summary{padding-left:16px;padding-right:16px;}
-  .action-items{gap:8px;}
 }
 </style>
 </head>
@@ -248,10 +243,10 @@ body{font-family:'Noto Sans KR',-apple-system,sans-serif;background:var(--gray-1
 <div class="tab-content" id="tab-calendar">
   <div class="section-title">📆 연간 일정표 — 월별 주요 공모 일정</div>
   <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px;">과거 실적 기반 예상 일정입니다. 🟢 접수중 / ⬜ 종료 / 🔵 예상(차기) — 정확한 일정은 각 기관 공식 사이트에서 확인하세요.</p>
-  <div class="cal-legend">
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#DCFCE7;"></div> 현재 접수중</div>
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gray-50);border:1px solid var(--gray-200);"></div> 지난 공모</div>
-    <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#EBF2FF;border:1px dashed var(--accent);"></div> 차기 예상</div>
+  <div class="cal-legend" style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-500);"><div style="width:14px;height:14px;border-radius:4px;background:#DCFCE7;"></div> 현재 접수중</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-500);"><div style="width:14px;height:14px;border-radius:4px;background:var(--gray-50);border:1px solid var(--gray-200);"></div> 지난 공모</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-500);"><div style="width:14px;height:14px;border-radius:4px;background:#EBF2FF;border:1px dashed var(--accent);"></div> 차기 예상</div>
   </div>
   <div class="calendar-grid" id="calendar-grid"></div>
 </div>
@@ -758,117 +753,54 @@ function filterCards(f){
   });
 }
 
+
 // ===== ACTION SUMMARY =====
 function renderActionSummary(){
   const active = announcements.filter(a=>!a.closed);
   const items = [];
-
-  // 마감 임박 (D-3 이내)
   const veryUrgent = active.filter(a=>{const d=getDday(a.deadlineDate); return d!==null && d>=0 && d<=3;});
-  if(veryUrgent.length){
-    items.push(`<div class="action-chip chip-urgent" onclick="switchTabByName('monthly')"><div class="chip-count">🚨 ${veryUrgent.length}</div><div class="chip-label">D-3 이내 마감<br>${veryUrgent.map(a=>a.title.substring(0,15)+'…').join(', ')}</div></div>`);
-  }
-
-  // 이번 주 마감 (D-7 이내)
+  if(veryUrgent.length) items.push('<div class="action-chip chip-urgent" onclick="switchTabByName(\'monthly\')"><div class="chip-count">🚨 '+veryUrgent.length+'</div><div class="chip-label">D-3 이내 마감</div></div>');
   const weekUrgent = active.filter(a=>{const d=getDday(a.deadlineDate); return d!==null && d>3 && d<=7;});
-  if(weekUrgent.length){
-    items.push(`<div class="action-chip chip-soon" onclick="switchTabByName('monthly')"><div class="chip-count">⏰ ${weekUrgent.length}</div><div class="chip-label">이번 주 마감</div></div>`);
-  }
-
-  // 미검증 공고
+  if(weekUrgent.length) items.push('<div class="action-chip chip-soon" onclick="switchTabByName(\'monthly\')"><div class="chip-count">⏰ '+weekUrgent.length+'</div><div class="chip-label">이번 주 마감</div></div>');
   const unverified = active.filter(a=>!a.verified);
-  if(unverified.length){
-    items.push(`<div class="action-chip chip-prepare" onclick="switchTabByName('monthly')"><div class="chip-count">⚠️ ${unverified.length}</div><div class="chip-label">출처 확인 필요</div></div>`);
-  }
-
-  // 신청 진행중
+  if(unverified.length) items.push('<div class="action-chip chip-prepare" onclick="switchTabByName(\'monthly\')"><div class="chip-count">⚠️ '+unverified.length+'</div><div class="chip-label">출처 확인 필요</div></div>');
   const bids = getBids();
   const applied = active.filter(a=>bids[a.id]);
-  if(applied.length){
-    items.push(`<div class="action-chip chip-info" onclick="switchTabByName('applied')"><div class="chip-count">📝 ${applied.length}</div><div class="chip-label">신청 진행중</div></div>`);
-  }
-
-  // 신규 공고 (7일 이내 등록)
-  const recentNew = active.filter(a=>{
-    if(!a.openDate) return false;
-    const diff = Math.ceil((TODAY - new Date(a.openDate))/(864e5));
-    return diff>=0 && diff<=7;
-  });
-  if(recentNew.length){
-    items.push(`<div class="action-chip chip-new" onclick="switchTabByName('monthly')"><div class="chip-count">🆕 ${recentNew.length}</div><div class="chip-label">최근 7일 신규</div></div>`);
-  }
-
+  if(applied.length) items.push('<div class="action-chip chip-info" onclick="switchTabByName(\'applied\')"><div class="chip-count">📝 '+applied.length+'</div><div class="chip-label">신청 진행중</div></div>');
+  const recentNew = active.filter(a=>{if(!a.openDate)return false;const diff=Math.ceil((TODAY-new Date(a.openDate))/(864e5));return diff>=0&&diff<=7;});
+  if(recentNew.length) items.push('<div class="action-chip chip-new" onclick="switchTabByName(\'monthly\')"><div class="chip-count">🆕 '+recentNew.length+'</div><div class="chip-label">최근 7일 신규</div></div>');
   const el = document.getElementById('action-items');
-  if(items.length===0){
-    el.innerHTML = '<div class="action-none">✅ 오늘은 긴급한 액션이 없습니다. 다음 공모 일정을 연간 일정표에서 확인하세요.</div>';
-  } else {
-    el.innerHTML = items.join('');
-  }
+  el.innerHTML = items.length ? items.join('') : '<div class="action-none">✅ 오늘은 긴급한 액션이 없습니다.</div>';
 }
-
 function switchTabByName(t){
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(x=>{ if(x.getAttribute('onclick')&&x.getAttribute('onclick').includes("'"+t+"'")) x.classList.add('active'); });
+  document.querySelectorAll('.tab').forEach(x=>{if(x.getAttribute('onclick')&&x.getAttribute('onclick').includes("'"+t+"'"))x.classList.add('active');});
   document.getElementById('tab-'+t).classList.add('active');
 }
-
 // ===== ANNUAL CALENDAR =====
 function renderCalendar(){
-  // 연간 일정 데이터 (과거 실적 + 예측)
-  const calendarData = [
-    {month:1, events:[
-      {name:'신나는국악여행 공연단체 모집', org:'예술경영지원센터', status:'closed', note:'매년 1월 모집'},
-      {name:'세종시 예술지원사업 공모', org:'세종시문화관광재단', status:'closed', note:'매년 1월 공모, 7.4억'},
-      {name:'세종시 공연장상주단체 육성지원', org:'세종시문화관광재단', status:'closed', note:'12월말~1월초'},
-      {name:'국립예술단체 청년 교육단원 모집', org:'국립국악원', status:'closed', note:'매년 1월'}
-    ]},
-    {month:2, events:[
-      {name:'대표공연 콘텐츠 지역유통 지원', org:'예술경영지원센터', status:'closed', note:'2~3월 접수'}
-    ]},
-    {month:3, events:[
-      {name:'대표공연 콘텐츠 지역유통 지원', org:'예술경영지원센터', status:'active', note:'~3/30 마감 추정'},
-      {name:'K-arts on the GO 2차', org:'한국국제문화교류진흥원', status:'active', note:'~3/30 마감 추정'},
-      {name:'경기 공연예술어워즈', org:'경기아트센터', status:'active', note:'~3/31 마감'},
-      {name:'예술활동준비금 지원사업', org:'한국예술인복지재단', status:'active', note:'~4/17 마감 (개인)'}
-    ]},
-    {month:4, events:[
-      {name:'예술활동준비금 접수 마감', org:'한국예술인복지재단', status:'active', note:'4/17 마감'}
-    ]},
-    {month:5, events:[]},
-    {month:6, events:[
-      {name:'하반기 지역대표예술단체 공모 준비', org:'문화체육관광부', status:'predicted', note:'하반기 공모 예상'}
-    ]},
-    {month:7, events:[]},
-    {month:8, events:[]},
-    {month:9, events:[
-      {name:'문예진흥기금 지원사업 접수', org:'한국문화예술위원회', status:'predicted', note:'매년 9~10월, 613억 규모'},
-      {name:'K-arts on the GO (다음차수)', org:'한국국제문화교류진흥원', status:'predicted', note:'하반기 차수 예상'}
-    ]},
-    {month:10, events:[
-      {name:'문예진흥기금 접수 마감', org:'한국문화예술위원회', status:'predicted', note:'10월 마감'}
-    ]},
-    {month:11, events:[]},
-    {month:12, events:[
-      {name:'지역대표예술단체 선정 발표', org:'문화체육관광부', status:'predicted', note:'차기 2026 하반기 대비'},
-      {name:'세종시 공연장상주단체 모집 공고', org:'세종시문화관광재단', status:'predicted', note:'12월말 공고 예상'}
-    ]}
+  const calData=[
+    {month:1,events:[{name:'신나는국악여행 모집',status:'closed',note:'매년 1월'},{name:'세종시 예술지원사업',status:'closed',note:'매년 1월, 7.4억'},{name:'공연장상주단체 육성',status:'closed',note:'12월말~1월초'},{name:'청년 교육단원 모집',status:'closed',note:'매년 1월'}]},
+    {month:2,events:[{name:'대표공연 지역유통 접수',status:'closed',note:'2~3월'}]},
+    {month:3,events:[{name:'대표공연 지역유통',status:'active',note:'~3/30'},{name:'K-arts on the GO',status:'active',note:'~3/30'},{name:'경기 공연예술어워즈',status:'active',note:'~3/31'},{name:'예술활동준비금',status:'active',note:'~4/17(개인)'}]},
+    {month:4,events:[{name:'예술활동준비금 마감',status:'active',note:'4/17'}]},
+    {month:5,events:[]},{month:6,events:[{name:'지역대표예술단체 준비',status:'predicted',note:'하반기 공모 예상'}]},
+    {month:7,events:[]},{month:8,events:[]},
+    {month:9,events:[{name:'문예진흥기금 접수',status:'predicted',note:'매년 9~10월, 613억'},{name:'K-arts on the GO 차수',status:'predicted',note:'하반기 예상'}]},
+    {month:10,events:[{name:'문예진흥기금 마감',status:'predicted',note:'10월'}]},
+    {month:11,events:[]},
+    {month:12,events:[{name:'지역대표예술단체 발표',status:'predicted',note:'하반기 대비'},{name:'공연장상주단체 공고',status:'predicted',note:'12월말 예상'}]}
   ];
-
-  const currentMon = TODAY.getMonth()+1;
-  const grid = document.getElementById('calendar-grid');
-  grid.innerHTML = calendarData.map(m => {
-    const isCurrent = m.month === currentMon;
-    const eventsHtml = m.events.length ? m.events.map(e => {
-      const cls = e.status==='active'?'cal-event-active':e.status==='predicted'?'cal-event-predicted':'cal-event-past';
-      const badge = e.status==='active'?'<span class="cal-badge cal-badge-open">접수중</span>':e.status==='predicted'?'<span class="cal-badge cal-badge-predict">예상</span>':'<span class="cal-badge cal-badge-closed">종료</span>';
-      return `<div class="cal-event ${cls}">${badge}<div>${e.name}<div style="font-size:11px;opacity:.7;margin-top:2px;">${e.note}</div></div></div>`;
-    }).join('') : '<div style="font-size:12px;color:var(--gray-300);padding:8px 0;">예정된 공모 없음</div>';
-
-    return `<div class="cal-month${isCurrent?' current':''}">
-      <div class="cal-month-header">${m.month}월 ${isCurrent?'<span style="font-size:11px;color:var(--blue);font-weight:600;">← 현재</span>':''}</div>
-      ${eventsHtml}
-    </div>`;
+  const curMon=TODAY.getMonth()+1;
+  document.getElementById('calendar-grid').innerHTML=calData.map(m=>{
+    const isCur=m.month===curMon;
+    const evHtml=m.events.length?m.events.map(e=>{
+      const cls=e.status==='active'?'cal-event-active':e.status==='predicted'?'cal-event-predicted':'cal-event-past';
+      const badge=e.status==='active'?'<span class="cal-badge cal-badge-open">접수중</span>':e.status==='predicted'?'<span class="cal-badge cal-badge-predict">예상</span>':'<span class="cal-badge cal-badge-closed">종료</span>';
+      return '<div class="cal-event '+cls+'">'+badge+'<div>'+e.name+'<div style="font-size:11px;opacity:.7;margin-top:2px;">'+e.note+'</div></div></div>';
+    }).join(''):'<div style="font-size:12px;color:var(--gray-300);padding:8px 0;">예정 없음</div>';
+    return '<div class="cal-month'+(isCur?' current':'')+'"><div class="cal-month-header">'+m.month+'월'+(isCur?' <span style="font-size:11px;color:var(--blue);font-weight:600;">← 현재</span>':'')+'</div>'+evHtml+'</div>';
   }).join('');
 }
 
@@ -925,8 +857,6 @@ function render(){
     document.getElementById('range-start').value='';
     document.getElementById('range-end').value='';
   }
-
-  // Action Summary & Calendar
   renderActionSummary();
   renderCalendar();
 }
