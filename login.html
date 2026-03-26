@@ -40,6 +40,7 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
+            text-decoration: none;
             transition: background 0.2s;
         }
         .kakao-btn:hover { background: #F0D800; }
@@ -80,7 +81,9 @@
             카카오톡 친구 메시지 기능을 위해<br>
             아래 버튼을 눌러 로그인해 주세요.
         </p>
-        <button class="kakao-btn" onclick="kakaoLogin()">카카오 로그인</button>
+        <a class="kakao-btn" id="loginBtn" href="https://kauth.kakao.com/oauth/authorize?client_id=f7026d9b90f9ea6b04009770b6f75f00&redirect_uri=https://eyejw29.github.io/sejong-gugak-dashboard/login.html&response_type=code&scope=friends,talk_message">
+            카카오 로그인
+        </a>
         <div id="status" class="status"></div>
         <div id="tokenArea" class="token-area"></div>
         <p class="note">
@@ -88,26 +91,20 @@
             카카오톡 메시지 발송을 위한 인증 페이지입니다.
         </p>
     </div>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
     <script>
-        Kakao.init('345da425cd8e558f0a2e49526dbea944');
         function showStatus(type, message) {
             var el = document.getElementById('status');
             el.className = 'status ' + type;
             el.innerHTML = message;
+            document.getElementById('loginBtn').style.display = 'none';
         }
-        function kakaoLogin() {
-            Kakao.Auth.authorize({
-                redirectUri: 'https://eyejw29.github.io/sejong-gugak-dashboard/login.html',
-                scope: 'friends,talk_message'
-            });
-        }
-        window.onload = function() {
+        (function() {
             var urlParams = new URLSearchParams(window.location.search);
             var code = urlParams.get('code');
             var error = urlParams.get('error');
             if (error) {
                 showStatus('error', '로그인이 취소되었습니다. 다시 시도해 주세요.');
+                document.getElementById('loginBtn').style.display = 'flex';
                 return;
             }
             if (code) {
@@ -131,11 +128,15 @@
                         tokenArea.innerHTML = '<strong>Access Token:</strong><br>' + data.access_token + '<br><br><strong>Scope:</strong><br>' + (data.scope || 'N/A');
                     } else {
                         showStatus('error', '토큰 발급 실패: ' + (data.error_description || JSON.stringify(data)));
+                        document.getElementById('loginBtn').style.display = 'flex';
                     }
                 })
-                .catch(function(err) { showStatus('error', '오류 발생: ' + err.message); });
+                .catch(function(err) {
+                    showStatus('error', '오류 발생: ' + err.message);
+                    document.getElementById('loginBtn').style.display = 'flex';
+                });
             }
-        };
+        })();
     </script>
 </body>
 </html>
