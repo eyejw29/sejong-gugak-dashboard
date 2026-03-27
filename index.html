@@ -8,85 +8,129 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#FAFAFA;--white:#FFF;--border:#E5E7EB;--border-light:#F3F4F6;
-  --text:#111827;--text-2:#6B7280;--text-3:#9CA3AF;
-  --blue:#2563EB;--blue-light:#EFF6FF;--blue-bg:#DBEAFE;
-  --red:#EF4444;--red-light:#FEE2E2;
-  --orange:#F59E0B;--orange-light:#FEF3C7;
-  --green:#10B981;--green-light:#ECFDF5;
-  --purple:#8B5CF6;--purple-light:#F3E8FF;
-  --radius:8px;
+  --bg:#F5F6F8;--white:#FFF;--border:#E2E5EA;--border-light:#ECEEF2;
+  --text:#1A1D24;--text-2:#5A6070;--text-3:#8E95A5;
+  --blue:#2563EB;--blue-50:#EFF6FF;--blue-100:#DBEAFE;--blue-600:#2563EB;--blue-700:#1D4ED8;
+  --red:#EF4444;--red-50:#FEF2F2;--red-100:#FEE2E2;
+  --orange:#F59E0B;--orange-50:#FFFBEB;--orange-100:#FEF3C7;
+  --green:#10B981;--green-50:#ECFDF5;--green-100:#D1FAE5;
+  --purple:#8B5CF6;--purple-50:#F5F3FF;
+  --radius:10px;--shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow:0 2px 8px rgba(0,0,0,.08);
 }
 body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;}
 
 /* ===== HEADER ===== */
-.header{background:var(--white);border-bottom:1px solid var(--border);padding:20px 28px;position:sticky;top:0;z-index:100;}
+.header{background:var(--white);border-bottom:1px solid var(--border);padding:18px 32px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);}
 .header-row{display:flex;justify-content:space-between;align-items:center;}
+.header-left{display:flex;align-items:center;gap:20px;}
 .header h1{font-size:17px;font-weight:700;color:var(--text);}
-.header-stats{font-size:13px;color:var(--text-2);margin-top:4px;}
-.header-stats strong{color:var(--text);font-weight:600;}
+.header-badge{display:flex;gap:12px;}
+.hb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-2);padding:4px 10px;border-radius:6px;background:var(--bg);}
+.hb strong{font-weight:700;color:var(--text);}
+.hb.urgent strong{color:var(--red);}
 .header-right{text-align:right;}
 .header-date{font-size:12px;color:var(--text-3);}
 
 /* ===== TABS ===== */
-.tabs{display:flex;background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;gap:4px;}
-.tab{padding:12px 18px;font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;user-select:none;}
+.tabs{display:flex;background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;gap:0;}
+.tab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--text-3);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;user-select:none;}
 .tab:hover{color:var(--blue);}
 .tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
 
 /* ===== TOOLBAR ===== */
-.toolbar{display:flex;align-items:center;gap:12px;padding:16px 28px;flex-wrap:wrap;}
-.search-box{flex:1;min-width:200px;max-width:360px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;background:var(--white);transition:.15s;}
-.search-box:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
-.toggle-group{display:flex;gap:6px;align-items:center;}
+.toolbar{display:flex;align-items:center;gap:10px;padding:16px 0;flex-wrap:wrap;}
+.search-box{width:260px;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;background:var(--white);transition:.15s;box-shadow:var(--shadow-sm);}
+.search-box:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.divider{width:1px;height:22px;background:var(--border);margin:0 4px;}
 .toggle-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:inherit;background:var(--white);color:var(--text-2);cursor:pointer;transition:.15s;user-select:none;}
-.toggle-btn:hover{border-color:var(--blue);color:var(--blue);}
-.toggle-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);}
-.sort-sel{padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:inherit;background:var(--white);cursor:pointer;}
+.toggle-btn:hover{border-color:var(--blue-600);color:var(--blue-600);}
+.toggle-btn.on{background:var(--blue-600);color:#fff;border-color:var(--blue-600);}
+.sort-sel{padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:inherit;background:var(--white);cursor:pointer;margin-left:auto;}
 
 /* ===== LIST ===== */
-.content{max-width:900px;margin:0 auto;padding:0 28px 40px;}
-.list{margin-top:4px;}
-.list-item{border-bottom:1px solid var(--border-light);padding:14px 0;cursor:pointer;transition:.08s;}
-.list-item:hover{background:var(--blue-light);margin:0 -16px;padding:14px 16px;border-radius:var(--radius);}
-.row1{display:flex;align-items:baseline;gap:10px;}
-.dday{font-size:13px;font-weight:700;min-width:44px;flex-shrink:0;}
-.dday.urgent{color:var(--red);}
-.dday.soon{color:var(--orange);}
-.dday.ok{color:var(--green);}
-.dday.closed{color:var(--text-3);}
-.item-title{font-size:14px;font-weight:600;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.item-deadline{font-size:12px;color:var(--text-3);flex-shrink:0;}
-.row2{display:flex;align-items:center;gap:8px;margin-top:3px;padding-left:54px;}
-.item-org{font-size:12px;color:var(--text-2);}
-.item-sep{color:var(--border);font-size:10px;}
-.item-target{font-size:11px;color:var(--text-3);}
-.verify-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;}
-.v-yes{background:var(--green-light);color:#065F46;}
-.v-no{background:var(--orange-light);color:#92400E;}
-.row-memo{display:flex;align-items:center;gap:6px;margin-top:4px;padding-left:54px;}
-.memo-text{font-size:12px;color:var(--blue);font-style:italic;}
-.memo-input{flex:1;padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;font-family:inherit;max-width:340px;display:none;}
-.memo-btn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:none;font-family:inherit;padding:2px 6px;border-radius:4px;}
-.memo-btn:hover{background:var(--blue-light);}
+.content{max-width:880px;margin:0 auto;padding:0 32px 60px;}
+.list{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
 
-/* ===== DETAIL PANEL ===== */
-.detail-panel{display:none;margin:0 0 8px;padding:16px 20px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-left:54px;}
-.detail-panel.open{display:block;}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:12px;}
-.detail-label{font-size:11px;color:var(--text-3);font-weight:500;margin-bottom:2px;}
-.detail-val{font-size:13px;font-weight:500;color:var(--text);}
-.detail-actions{display:flex;gap:8px;margin-top:8px;padding-top:12px;border-top:1px solid var(--border-light);}
-.detail-actions a,.detail-actions button{font-size:12px;padding:6px 14px;border-radius:var(--radius);text-decoration:none;font-family:inherit;cursor:pointer;transition:.15s;}
-.link-btn{background:var(--blue-light);color:var(--blue);border:none;font-weight:500;}
-.link-btn:hover{background:var(--blue-bg);}
-.cal-btn{background:var(--purple-light);color:var(--purple);border:none;font-weight:500;}
-.cal-btn:hover{background:#EDE9FE;}
+/* ===== CARD ===== */
+.card{background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);position:relative;transition:.15s;}
+.card:hover{box-shadow:var(--shadow);}
+.rel-bar{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:var(--radius) 0 0 var(--radius);}
+.rel-high{background:var(--green);}
+.rel-mid{background:var(--orange);}
+.rel-low{background:var(--border);}
 
-/* history accordion */
-.history-toggle{font-size:12px;color:var(--text-2);cursor:pointer;background:none;border:none;font-family:inherit;padding:4px 0;margin-top:8px;display:flex;align-items:center;gap:4px;}
+/* Row 1: 헤더 (D-day + 제목 + 마감) */
+.card-header{display:grid;grid-template-columns:64px 1fr auto;align-items:center;padding:16px 20px 10px 20px;gap:0 14px;}
+.dday-badge{text-align:center;font-weight:700;font-size:14px;line-height:1;padding:8px 4px;border-radius:8px;}
+.dday-badge.urgent{background:var(--red-100);color:var(--red);}
+.dday-badge.soon{background:var(--orange-100);color:#D97706;}
+.dday-badge.ok{background:var(--green-100);color:#059669;}
+.dday-badge.closed{background:var(--bg);color:var(--text-3);}
+.dday-sub{font-size:9px;font-weight:500;margin-top:3px;opacity:.8;}
+
+.card-title-area{min-width:0;}
+.card-title{font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-meta{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap;}
+.meta-org{font-size:12px;color:var(--text-2);font-weight:500;}
+.meta-sep{color:var(--border);font-size:9px;}
+.meta-target{font-size:11px;color:var(--text-3);}
+.meta-type{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--purple-50);color:var(--purple);font-weight:500;}
+.verify-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;}
+.v-yes{background:var(--green-50);color:#065F46;}
+.v-no{background:var(--orange-50);color:#92400E;}
+.new-dot{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;margin-left:5px;vertical-align:middle;}
+
+.card-deadline{text-align:right;flex-shrink:0;min-width:64px;}
+.deadline-date{font-size:14px;font-weight:600;color:var(--text-2);}
+.deadline-label{font-size:10px;color:var(--text-3);margin-top:1px;}
+
+/* Row 2: 핵심 정보 3칸 (항상 표시) */
+.card-info{display:grid;grid-template-columns:1fr 1fr 1fr;margin:0 20px 12px 20px;border-radius:8px;overflow:hidden;border:1px solid var(--border-light);background:var(--bg);}
+.info-cell{padding:10px 14px;border-right:1px solid var(--border-light);}
+.info-cell:last-child{border-right:none;}
+.info-label{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;}
+.info-val{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;}
+.info-val.fit-yes{color:var(--green);}
+.info-val.fit-maybe{color:var(--orange);}
+.info-val.fit-no{color:var(--red);}
+.info-val.budget{color:var(--blue-600);}
+.info-sub{font-size:10px;color:var(--text-3);margin-top:1px;}
+
+/* Row 3: 메모 박스 */
+.card-memo-area{margin:0 20px 12px;padding:10px 14px;background:var(--blue-50);border:1px solid var(--blue-100);border-radius:8px;display:flex;align-items:center;gap:10px;min-height:40px;}
+.card-memo-area.empty{background:var(--bg);border-color:var(--border-light);border-style:dashed;}
+.memo-icon{font-size:14px;flex-shrink:0;}
+.memo-text{font-size:13px;color:var(--blue-700);font-weight:500;flex:1;}
+.memo-placeholder{font-size:12px;color:var(--text-3);flex:1;}
+.memo-btn{font-size:11px;color:var(--blue-600);cursor:pointer;background:none;border:none;font-family:inherit;padding:4px 10px;border-radius:6px;font-weight:500;flex-shrink:0;}
+.memo-btn:hover{background:var(--blue-100);}
+.memo-input{flex:1;padding:6px 10px;border:1px solid var(--blue);border-radius:6px;font-size:13px;font-family:inherit;outline:none;display:none;background:var(--white);}
+
+/* Row 4: 액션 + 노트 */
+.card-footer{padding:0 20px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.card-note{font-size:12px;color:var(--text-2);flex:1;min-width:200px;}
+.card-note span{background:var(--orange-50);padding:2px 8px;border-radius:4px;}
+.card-actions{display:flex;gap:6px;flex-shrink:0;}
+.card-actions a,.card-actions button{font-size:11px;padding:6px 14px;border-radius:8px;text-decoration:none;font-family:inherit;cursor:pointer;transition:.15s;font-weight:500;border:none;}
+.btn-primary{background:var(--blue-600);color:#fff;}
+.btn-primary:hover{background:var(--blue-700);}
+.btn-secondary{background:var(--white);color:var(--text-2);border:1px solid var(--border) !important;}
+.btn-secondary:hover{background:var(--bg);}
+
+/* 접이식: 상세 + 이력 (클릭 시) */
+.card-expand{display:none;border-top:1px solid var(--border-light);padding:16px 20px;background:var(--bg);}
+.card-expand.open{display:block;}
+.expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;}
+.exp-label{font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:.3px;}
+.exp-val{font-size:12px;color:var(--text);font-weight:500;margin-top:1px;}
+.expand-toggle{display:flex;align-items:center;justify-content:center;padding:6px;font-size:11px;color:var(--text-3);cursor:pointer;background:none;border:none;border-top:1px solid var(--border-light);width:100%;font-family:inherit;transition:.15s;}
+.expand-toggle:hover{background:var(--bg);color:var(--blue);}
+
+/* history */
+.history-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);}
+.history-toggle{font-size:12px;color:var(--text-2);cursor:pointer;background:none;border:none;font-family:inherit;padding:4px 0;display:flex;align-items:center;gap:4px;font-weight:500;}
 .history-toggle:hover{color:var(--blue);}
-.history-content{display:none;margin-top:10px;padding:12px 16px;background:var(--bg);border-radius:var(--radius);}
+.history-content{display:none;margin-top:10px;padding:12px 16px;background:var(--white);border-radius:var(--radius);border:1px solid var(--border-light);}
 .history-content.open{display:block;}
 .history-year{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
 .history-detail{font-size:12px;color:var(--text-2);line-height:1.7;margin-bottom:10px;}
@@ -95,54 +139,54 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 .ref-item a:hover{text-decoration:underline;}
 
 /* ===== CALENDAR ===== */
-.cal-container{max-width:700px;margin:20px auto 0;}
+.cal-container{max-width:720px;margin:20px auto 0;}
 .cal-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
-.cal-nav-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.cal-nav-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:var(--shadow-sm);}
 .cal-nav-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
-.cal-month{font-size:16px;font-weight:700;min-width:120px;text-align:center;}
-.cal-today-btn{font-size:11px;padding:4px 12px;border-radius:16px;background:var(--blue);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:500;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-month{font-size:17px;font-weight:700;min-width:120px;text-align:center;}
+.cal-today-btn{font-size:11px;padding:5px 14px;border-radius:16px;background:var(--blue);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:500;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-header{text-align:center;font-size:11px;font-weight:600;color:var(--text-3);padding:8px 0;}
-.cal-cell{min-height:70px;padding:4px;border:1px solid var(--border-light);border-radius:4px;background:var(--white);transition:.1s;cursor:default;}
-.cal-cell.other-month{background:var(--bg);opacity:.5;}
-.cal-cell.today{border-color:var(--blue);background:var(--blue-light);}
-.cal-day{font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.cal-cell{min-height:74px;padding:5px;border:1px solid var(--border-light);border-radius:6px;background:var(--white);}
+.cal-cell.other-month{background:var(--bg);opacity:.4;}
+.cal-cell.today{border-color:var(--blue);background:var(--blue-50);box-shadow:inset 0 0 0 1px var(--blue);}
+.cal-day{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
 .cal-today-mark .cal-day{color:var(--blue);}
-.cal-event{font-size:10px;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;}
-.cal-event.urgent{background:var(--red-light);color:var(--red);}
-.cal-event.soon{background:var(--orange-light);color:#92400E;}
-.cal-event.normal{background:var(--blue-light);color:var(--blue);}
+.cal-event{font-size:10px;padding:2px 5px;border-radius:4px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;font-weight:500;}
+.cal-event.urgent{background:var(--red-100);color:var(--red);}
+.cal-event.soon{background:var(--orange-100);color:#92400E;}
+.cal-event.normal{background:var(--blue-100);color:var(--blue-700);}
 
-/* ===== CLOSED/REF TAB ===== */
-.closed-list .list-item{opacity:.7;}
-.closed-list .list-item:hover{opacity:1;}
-.source-list{margin-top:12px;}
-.source-item{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:.15s;}
-.source-item:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.04);}
+/* ===== CLOSED/REF ===== */
+.section-label{font-size:13px;font-weight:600;color:var(--text-2);margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border-light);}
+.source-item{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:.15s;box-shadow:var(--shadow-sm);}
+.source-item:hover{border-color:var(--blue);box-shadow:var(--shadow);}
 .src-name{font-size:13px;font-weight:600;}
 .src-note{font-size:11px;color:var(--text-3);margin-top:2px;}
-.src-type{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--purple-light);color:var(--purple);font-weight:500;}
+.src-type{font-size:10px;padding:3px 10px;border-radius:4px;background:var(--purple-50);color:var(--purple);font-weight:500;}
 .src-url{font-size:11px;color:var(--blue);margin-top:2px;}
-.section-label{font-size:13px;font-weight:600;color:var(--text-2);margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border-light);}
 
-.empty-msg{text-align:center;padding:40px;color:var(--text-3);font-size:13px;}
+.empty-msg{text-align:center;padding:48px;color:var(--text-3);font-size:13px;}
 .tab-content{display:none;}.tab-content.active{display:block;}
-.new-dot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;margin-left:4px;vertical-align:middle;}
 
 /* toast */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;z-index:999;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
 
 @media(max-width:768px){
-  .header,.tabs,.toolbar{padding-left:16px;padding-right:16px;}
+  .header{padding:14px 16px;}
+  .header-badge{display:none;}
+  .tabs{padding:0 16px;}
   .content{padding:0 16px 40px;}
-  .detail-grid{grid-template-columns:1fr;}
+  .card-header{grid-template-columns:52px 1fr auto;padding:12px 14px 8px;gap:0 10px;}
+  .card-info{grid-template-columns:1fr;margin:0 14px 10px;}
+  .info-cell{border-right:none;border-bottom:1px solid var(--border-light);}
+  .info-cell:last-child{border-bottom:none;}
+  .card-memo-area{margin:0 14px 10px;}
+  .card-footer{padding:0 14px 12px;}
+  .card-expand{padding:14px;}
+  .expand-grid{grid-template-columns:1fr;}
   .cal-cell{min-height:50px;}
-  .cal-event{font-size:9px;}
-  .row2{padding-left:44px;}
-  .row-memo{padding-left:44px;}
-  .detail-panel{margin-left:44px;}
-  .dday{min-width:36px;font-size:12px;}
 }
 </style>
 </head>
@@ -151,13 +195,17 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 <!-- HEADER -->
 <div class="header">
   <div class="header-row">
-    <div>
+    <div class="header-left">
       <h1>세종국악관현악단 공고 모니터링</h1>
-      <div class="header-stats" id="header-stats"></div>
+      <div class="header-badge">
+        <div class="hb">접수중 <strong id="s-total">0</strong></div>
+        <div class="hb urgent">마감임박 <strong id="s-urgent">0</strong></div>
+        <div class="hb">메모 <strong id="s-memo">0</strong></div>
+      </div>
     </div>
     <div class="header-right">
       <div class="header-date" id="header-date"></div>
-      <div class="header-date" id="update-info" style="margin-top:2px;"></div>
+      <div class="header-date" id="update-info" style="margin-top:1px;"></div>
     </div>
   </div>
 </div>
@@ -172,15 +220,13 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 <!-- CONTENT -->
 <div class="content">
 
-<!-- TAB: 공고 리스트 -->
 <div class="tab-content active" id="tab-list">
-  <div class="toolbar" style="padding-left:0;padding-right:0;">
-    <input type="text" class="search-box" id="search-input" placeholder="공고명, 기관명 검색..." oninput="onSearch()">
-    <div class="toggle-group">
-      <button class="toggle-btn" id="tgl-danche" onclick="toggleFilter('danche')">단체</button>
-      <button class="toggle-btn" id="tgl-gaein" onclick="toggleFilter('gaein')">개인</button>
-      <button class="toggle-btn" id="tgl-verified" onclick="toggleFilter('verified')">✅ 검증만</button>
-    </div>
+  <div class="toolbar">
+    <input type="text" class="search-box" id="search-input" placeholder="검색..." oninput="onSearch()">
+    <div class="divider"></div>
+    <button class="toggle-btn" id="tgl-danche" onclick="toggleFilter('danche')">단체</button>
+    <button class="toggle-btn" id="tgl-gaein" onclick="toggleFilter('gaein')">개인</button>
+    <button class="toggle-btn" id="tgl-verified" onclick="toggleFilter('verified')">✅ 검증만</button>
     <select class="sort-sel" id="sort-sel" onchange="renderList()">
       <option value="deadline">마감일순</option>
       <option value="relevance">관련도순</option>
@@ -189,7 +235,6 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
   <div class="list" id="main-list"></div>
 </div>
 
-<!-- TAB: 캘린더 -->
 <div class="tab-content" id="tab-calendar">
   <div class="cal-container">
     <div class="cal-nav">
@@ -202,26 +247,22 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
   </div>
 </div>
 
-<!-- TAB: 종료/참고 -->
 <div class="tab-content" id="tab-closed">
   <div class="section-label">📁 마감된 공고 (차기 대비용)</div>
-  <div class="closed-list list" id="closed-list"></div>
-  <div class="section-label" style="margin-top:28px;">📡 모니터링 소스</div>
-  <div class="source-list" id="source-list"></div>
+  <div class="list" id="closed-list"></div>
+  <div class="section-label" style="margin-top:32px;">📡 모니터링 소스</div>
+  <div id="source-list"></div>
 </div>
 
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== CONSTANTS =====
 const TODAY = new Date();
 const TODAY_STR = TODAY.toISOString().split('T')[0];
 const FIREBASE_URL = 'https://sejong-gugak-default-rtdb.firebaseio.com';
 
-// ===== DATA (auto-injected by build.py) =====
 const announcements = [
   {
     "id": 1,
@@ -560,433 +601,300 @@ const sources = [
   }
 ];
 
-// ===== AUTO-CLOSE =====
+// auto-close
 announcements.forEach(a => {
-  if(!a.closed && a.deadlineDate) {
+  if(!a.closed && a.deadlineDate){
     const dd = Math.ceil((new Date(a.deadlineDate) - TODAY) / 864e5);
     if(dd < -1) a._autoExpired = true;
   }
 });
 
-// ===== STATE =====
 let searchQuery = '';
-let filters = { danche: false, gaein: false, verified: false };
-let openDetailId = null;
+let filters = { danche:false, gaein:false, verified:false };
+let expandedIds = new Set(); // 상세 펼침 상태
 let openHistoryId = null;
-let memos = {}; // { announcementId: "memo text" }
+let memos = {};
 let calMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
-let memoSaveTimer = null;
 
-// ===== INIT =====
 document.getElementById('header-date').textContent = `${TODAY.getFullYear()}년 ${TODAY.getMonth()+1}월 ${TODAY.getDate()}일`;
-document.getElementById('update-info').textContent = '업데이트: ' + TODAY.toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+document.getElementById('update-info').textContent = '업데이트 ' + TODAY.toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 
-// ===== FIREBASE MEMO =====
+// ===== FIREBASE =====
 async function loadMemos(){
-  try {
-    const res = await fetch(FIREBASE_URL + '/memos.json');
-    if(res.ok){
-      const data = await res.json();
-      if(data) memos = data;
-    }
-  } catch(e){ console.warn('메모 로드 실패:', e); }
+  try { const r = await fetch(FIREBASE_URL+'/memos.json'); if(r.ok){ const d = await r.json(); if(d) memos = d; } }
+  catch(e){ console.warn('메모 로드 실패:', e); }
   renderAll();
 }
-
 async function saveMemo(id, text){
   memos[id] = text;
-  try {
-    await fetch(FIREBASE_URL + '/memos/' + id + '.json', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(text)
-    });
-  } catch(e){ console.warn('메모 저장 실패:', e); }
+  try { await fetch(FIREBASE_URL+'/memos/'+id+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(text)}); }
+  catch(e){ console.warn('메모 저장 실패:', e); }
 }
-
 async function deleteMemo(id){
   delete memos[id];
-  try {
-    await fetch(FIREBASE_URL + '/memos/' + id + '.json', { method: 'DELETE' });
-  } catch(e){ console.warn('메모 삭제 실패:', e); }
+  try { await fetch(FIREBASE_URL+'/memos/'+id+'.json',{method:'DELETE'}); }
+  catch(e){ console.warn('메모 삭제 실패:', e); }
 }
 
 // ===== HELPERS =====
-function getDday(d){ if(!d) return null; return Math.ceil((new Date(d) - TODAY) / 864e5); }
-
-function ddayText(d){
-  const dd = getDday(d);
-  if(dd === null) return { text: '—', cls: 'closed' };
-  if(dd < 0) return { text: '마감', cls: 'closed' };
-  if(dd === 0) return { text: 'D-Day', cls: 'urgent' };
-  if(dd <= 5) return { text: 'D-' + dd, cls: 'urgent' };
-  if(dd <= 14) return { text: 'D-' + dd, cls: 'soon' };
-  return { text: 'D-' + dd, cls: 'ok' };
+function getDday(d){ if(!d) return null; return Math.ceil((new Date(d)-TODAY)/864e5); }
+function ddayInfo(d){
+  const dd=getDday(d);
+  if(dd===null) return {text:'—',sub:'',cls:'closed'};
+  if(dd<0) return {text:'마감',sub:'종료',cls:'closed'};
+  if(dd===0) return {text:'D-Day',sub:'오늘 마감',cls:'urgent'};
+  if(dd<=5) return {text:'D-'+dd,sub:'마감임박',cls:'urgent'};
+  if(dd<=14) return {text:'D-'+dd,sub:'접수중',cls:'soon'};
+  return {text:'D-'+dd,sub:'접수중',cls:'ok'};
 }
-
-function fmtDate(d){ if(!d) return '—'; const p = d.split('-'); return p[1] + '/' + p[2]; }
-function fmtDateFull(d){ if(!d) return '—'; return d; }
-
-function isNew(a){
-  if(!a.openDate) return false;
-  const diff = Math.ceil((TODAY - new Date(a.openDate)) / 864e5);
-  return diff <= 3;
-}
-
-// ===== FILTER & SORT =====
-function getActiveAnnouncements(){
-  return announcements.filter(a => !a.closed && !a._autoExpired);
-}
-
-function getClosedAnnouncements(){
-  const autoExpired = announcements.filter(a => a._autoExpired);
-  return announcements.filter(a => a.closed).concat(autoExpired);
-}
-
+function fmtShort(d){ if(!d) return '—'; const p=d.split('-'); return p[1]+'.'+p[2]; }
+function isNew(a){ if(!a.openDate) return false; return Math.ceil((TODAY-new Date(a.openDate))/864e5)<=3; }
+function getActive(){ return announcements.filter(a=>!a.closed&&!a._autoExpired); }
+function getClosed(){ return announcements.filter(a=>a.closed).concat(announcements.filter(a=>a._autoExpired)); }
 function applyFilters(list){
-  let result = list;
-  if(searchQuery){
-    result = result.filter(a =>
-      (a.title + ' ' + a.org + ' ' + a.type + ' ' + (a.note||'')).toLowerCase().includes(searchQuery)
-    );
-  }
-  if(filters.danche) result = result.filter(a => a.target.includes('단체'));
-  if(filters.gaein) result = result.filter(a => a.target.includes('개인'));
-  if(filters.verified) result = result.filter(a => a.verified);
-  return result;
+  let r=list;
+  if(searchQuery) r=r.filter(a=>(a.title+' '+a.org+' '+a.type+' '+(a.note||'')).toLowerCase().includes(searchQuery));
+  if(filters.danche) r=r.filter(a=>a.target.includes('단체'));
+  if(filters.gaein) r=r.filter(a=>a.target.includes('개인'));
+  if(filters.verified) r=r.filter(a=>a.verified);
+  return r;
 }
-
 function sortList(arr){
-  const mode = document.getElementById('sort-sel').value;
-  return [...arr].sort((a,b) => {
-    if(mode === 'deadline'){
-      const da = a.deadlineDate ? new Date(a.deadlineDate).getTime() : Infinity;
-      const db = b.deadlineDate ? new Date(b.deadlineDate).getTime() : Infinity;
-      return da - db;
-    } else {
-      const order = {high:0, mid:1, low:2};
-      return (order[a.relevance]||2) - (order[b.relevance]||2);
-    }
+  const mode=document.getElementById('sort-sel').value;
+  return [...arr].sort((a,b)=>{
+    if(mode==='deadline') return (a.deadlineDate?new Date(a.deadlineDate).getTime():Infinity)-(b.deadlineDate?new Date(b.deadlineDate).getTime():Infinity);
+    const o={high:0,mid:1,low:2}; return (o[a.relevance]||2)-(o[b.relevance]||2);
   });
 }
 
-// ===== .ICS GENERATOR =====
+// ===== .ICS =====
 function downloadIcs(a){
-  const start = a.deadlineDate ? a.deadlineDate.replace(/-/g,'') : '';
-  if(!start){ showToast('마감일 정보가 없습니다'); return; }
-  const end = start; // all-day event
-  const ics = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//세종국악//공고모니터링//KO',
-    'BEGIN:VEVENT',
-    'DTSTART;VALUE=DATE:' + start,
-    'DTEND;VALUE=DATE:' + start,
-    'SUMMARY:[마감] ' + a.title,
-    'DESCRIPTION:기관: ' + a.org + '\\n대상: ' + a.target + '\\n예산: ' + a.budget + (a.applyUrl ? '\\n링크: ' + a.applyUrl : ''),
-    'BEGIN:VALARM',
-    'TRIGGER:-P1D',
-    'ACTION:DISPLAY',
-    'DESCRIPTION:내일 마감: ' + a.title,
-    'END:VALARM',
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ].join('\r\n');
-  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = a.title.replace(/[^가-힣a-zA-Z0-9 ]/g,'').substring(0,30) + '.ics';
-  link.click();
-  URL.revokeObjectURL(url);
-  showToast('📅 캘린더 파일 다운로드 완료');
+  const start=a.deadlineDate?a.deadlineDate.replace(/-/g,''):'';
+  if(!start){showToast('마감일 정보 없음');return;}
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//세종국악//공고//KO','BEGIN:VEVENT',
+    'DTSTART;VALUE=DATE:'+start,'DTEND;VALUE=DATE:'+start,
+    'SUMMARY:[마감] '+a.title,
+    'DESCRIPTION:기관: '+a.org+'\\n대상: '+a.target+'\\n예산: '+a.budget+(a.applyUrl?'\\n링크: '+a.applyUrl:''),
+    'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:내일 마감: '+a.title,'END:VALARM',
+    'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const el=document.createElement('a');el.href=url;
+  el.download=a.title.replace(/[^가-힣a-zA-Z0-9 ]/g,'').substring(0,30)+'.ics';
+  el.click();URL.revokeObjectURL(url);
+  showToast('📅 캘린더에 추가 완료');
 }
+function showToast(msg){ const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200); }
 
-// ===== TOAST =====
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
+// ===== RENDER CARD =====
+function renderCard(a, showMemo){
+  const dd=ddayInfo(a.deadlineDate);
+  const memo=memos[a.id]||'';
+  const isExpanded=expandedIds.has(a.id);
+  const rel=a.relevance==='high'?'rel-high':a.relevance==='mid'?'rel-mid':'rel-low';
+  const fitCls=a.qualifyFit==='yes'?'fit-yes':a.qualifyFit==='maybe'?'fit-maybe':'fit-no';
+  const fitTxt=a.qualifyFit==='yes'?'✅ 지원 가능':a.qualifyFit==='maybe'?'⚠️ 조건부':'❌ 해당없음';
 
-// ===== RENDER LIST =====
-function renderListItem(a, showMemo){
-  const dd = ddayText(a.deadlineDate);
-  const isNewItem = isNew(a);
-  const memo = memos[a.id] || '';
-  const isOpen = openDetailId === a.id;
+  let h=`<div class="card" id="card-${a.id}"><div class="rel-bar ${rel}"></div>`;
 
-  let html = `<div class="list-item" onclick="toggleDetail(${a.id}, event)">`;
-  html += `<div class="row1">`;
-  html += `<span class="dday ${dd.cls}">${dd.text}</span>`;
-  html += `<span class="item-title">${a.title}${isNewItem ? '<span class="new-dot"></span>' : ''}</span>`;
-  html += `<span class="item-deadline">~${fmtDate(a.deadlineDate)}</span>`;
-  html += `</div>`;
-  html += `<div class="row2">`;
-  html += `<span class="item-org">${a.org}</span>`;
-  html += `<span class="item-sep">·</span>`;
-  html += `<span class="item-target">${a.target}</span>`;
-  html += `<span class="item-sep">·</span>`;
-  html += `<span class="verify-badge ${a.verified ? 'v-yes' : 'v-no'}">${a.verified ? '✅검증' : '⚠️확인필요'}</span>`;
-  html += `</div>`;
+  // Row 1: 헤더
+  h+=`<div class="card-header">`;
+  h+=`<div class="dday-badge ${dd.cls}"><div>${dd.text}</div><div class="dday-sub">${dd.sub}</div></div>`;
+  h+=`<div class="card-title-area">`;
+  h+=`<div class="card-title">${a.title}${isNew(a)?'<span class="new-dot"></span>':''}</div>`;
+  h+=`<div class="card-meta">`;
+  h+=`<span class="meta-org">${a.org}</span><span class="meta-sep">·</span>`;
+  h+=`<span class="meta-target">${a.target}</span><span class="meta-sep">·</span>`;
+  h+=`<span class="meta-type">${a.type}</span>`;
+  h+=`<span class="verify-badge ${a.verified?'v-yes':'v-no'}">${a.verified?'✅ 검증':'⚠ 확인필요'}</span>`;
+  h+=`</div></div>`;
+  h+=`<div class="card-deadline"><div class="deadline-date">~${fmtShort(a.deadlineDate)}</div><div class="deadline-label">마감</div></div>`;
+  h+=`</div>`;
 
-  // memo line
-  if(showMemo !== false){
-    html += `<div class="row-memo">`;
+  // Row 2: 핵심정보 3칸 (항상 노출)
+  h+=`<div class="card-info">`;
+  h+=`<div class="info-cell"><div class="info-label">적합도</div><div class="info-val ${fitCls}">${fitTxt}</div></div>`;
+  h+=`<div class="info-cell"><div class="info-label">지원 예산</div><div class="info-val budget">${a.budget||'—'}</div>`;
+  if(a.budgetScale) h+=`<div class="info-sub">${a.budgetScale}</div>`;
+  h+=`</div>`;
+  h+=`<div class="info-cell"><div class="info-label">자격요건</div><div class="info-val" style="font-size:12px;">${a.qualification||'—'}</div></div>`;
+  h+=`</div>`;
+
+  // Row 3: 메모 박스
+  if(showMemo!==false){
     if(memo){
-      html += `<span class="memo-text" id="memo-display-${a.id}">📝 ${escHtml(memo)}</span>`;
-      html += `<button class="memo-btn" onclick="startEditMemo(${a.id}, event)">수정</button>`;
+      h+=`<div class="card-memo-area">`;
+      h+=`<span class="memo-icon">📝</span>`;
+      h+=`<span class="memo-text">${escHtml(memo)}</span>`;
+      h+=`<button class="memo-btn" onclick="startEditMemo(${a.id},event)">수정</button>`;
+      h+=`<input class="memo-input" id="memo-input-${a.id}" placeholder="메모 입력 후 Enter" onkeydown="if(event.key==='Enter')saveMemoFromInput(${a.id})" onblur="saveMemoFromInput(${a.id})" value="${escAttr(memo)}">`;
+      h+=`</div>`;
     } else {
-      html += `<button class="memo-btn" onclick="startEditMemo(${a.id}, event)">+ 메모</button>`;
+      h+=`<div class="card-memo-area empty">`;
+      h+=`<span class="memo-icon">📝</span>`;
+      h+=`<span class="memo-placeholder">메모를 추가하세요</span>`;
+      h+=`<button class="memo-btn" onclick="startEditMemo(${a.id},event)">+ 작성</button>`;
+      h+=`<input class="memo-input" id="memo-input-${a.id}" placeholder="메모 입력 후 Enter" onkeydown="if(event.key==='Enter')saveMemoFromInput(${a.id})" onblur="saveMemoFromInput(${a.id})" value="">`;
+      h+=`</div>`;
     }
-    html += `<input class="memo-input" id="memo-input-${a.id}" placeholder="메모 입력..." onkeydown="if(event.key==='Enter')saveMemoFromInput(${a.id})" onblur="saveMemoFromInput(${a.id})" value="${escAttr(memo)}">`;
-    html += `</div>`;
   }
 
-  html += `</div>`; // end list-item
+  // Row 4: 하단 (노트 + 액션)
+  h+=`<div class="card-footer">`;
+  h+=`<div class="card-note">${a.note?'<span>💡 '+a.note+'</span>':''}</div>`;
+  h+=`<div class="card-actions">`;
+  const linkUrl=a.verifyUrl||a.applyUrl;
+  if(linkUrl) h+=`<a href="${linkUrl}" target="_blank" class="btn-primary">🔗 원문 보기</a>`;
+  if(a.deadlineDate&&getDday(a.deadlineDate)>=0) h+=`<button class="btn-secondary" onclick="downloadIcs(announcements.find(x=>x.id===${a.id}));event.stopPropagation();">📅 캘린더 추가</button>`;
+  h+=`</div></div>`;
 
-  // detail panel
-  html += `<div class="detail-panel ${isOpen ? 'open' : ''}" id="detail-${a.id}">`;
-  html += `<div class="detail-grid">`;
-  html += `<div><div class="detail-label">자격요건</div><div class="detail-val">${a.qualification || '—'}</div></div>`;
-  html += `<div><div class="detail-label">적합도</div><div class="detail-val" style="color:${a.qualifyFit==='yes'?'var(--green)':a.qualifyFit==='maybe'?'var(--orange)':'var(--red)'}">${a.qualifyFit==='yes'?'✅ 지원 가능':a.qualifyFit==='maybe'?'⚠️ 조건부':'❌ 해당없음'}</div></div>`;
-  html += `<div><div class="detail-label">지원 예산</div><div class="detail-val" style="color:var(--blue);font-weight:600;">${a.budget || '—'}</div></div>`;
-  html += `<div><div class="detail-label">예산 규모</div><div class="detail-val">${a.budgetScale || '—'}${a.budgetNote ? '<br><span style="font-size:11px;color:var(--text-2);">'+a.budgetNote+'</span>' : ''}</div></div>`;
-  html += `<div><div class="detail-label">출처</div><div class="detail-val" style="font-size:12px;">${a.verifySource || '—'}</div></div>`;
-  html += `<div><div class="detail-label">공고일 / 마감일</div><div class="detail-val">${fmtDateFull(a.openDate)} ~ ${a.deadline || fmtDateFull(a.deadlineDate)}</div></div>`;
-  html += `</div>`; // end detail-grid
-  if(a.note) html += `<div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">💡 ${a.note}</div>`;
+  // 접이식: 상세 정보
+  h+=`<div class="card-expand ${isExpanded?'open':''}" id="expand-${a.id}">`;
+  h+=`<div class="expand-grid">`;
+  h+=`<div><div class="exp-label">출처</div><div class="exp-val">${a.verifySource||'—'}</div></div>`;
+  h+=`<div><div class="exp-label">공고일 / 마감일</div><div class="exp-val">${a.openDate||'—'} ~ ${a.deadline||a.deadlineDate||'—'}</div></div>`;
+  if(a.budgetNote){h+=`<div><div class="exp-label">예산 참고</div><div class="exp-val">${a.budgetNote}</div></div>`;}
+  h+=`</div>`;
 
-  html += `<div class="detail-actions">`;
-  if(a.applyUrl || a.verifyUrl){
-    html += `<a href="${a.applyUrl || a.verifyUrl}" target="_blank" class="link-btn">🔗 공고 페이지</a>`;
-  }
-  if(a.deadlineDate && getDday(a.deadlineDate) >= 0){
-    html += `<button class="cal-btn" onclick="downloadIcs(announcements.find(x=>x.id===${a.id})); event.stopPropagation();">📅 캘린더에 추가</button>`;
-  }
-  html += `</div>`;
-
-  // history section
-  if(a.history && a.history.length > 0){
-    const hOpen = openHistoryId === a.id;
-    html += `<button class="history-toggle" onclick="toggleHistory(${a.id}, event)">${hOpen ? '▼' : '▶'} 과거 이력 & 관련 자료</button>`;
-    html += `<div class="history-content ${hOpen ? 'open' : ''}" id="history-${a.id}">`;
-    a.history.forEach(h => {
-      html += `<div class="history-year">${h.year}년</div>`;
-      html += `<div class="history-detail">`;
-      if(h.summary) html += h.summary + '<br>';
-      if(h.budget) html += '예산: ' + h.budget + '<br>';
-      if(h.sejongResult) html += '세종국악: ' + h.sejongResult;
-      html += `</div>`;
+  // history
+  if(a.history&&a.history.length>0){
+    const hOpen=openHistoryId===a.id;
+    h+=`<div class="history-section">`;
+    h+=`<button class="history-toggle" onclick="toggleHistory(${a.id},event)">${hOpen?'▼':'▶'} 과거 이력 & 관련 자료</button>`;
+    h+=`<div class="history-content ${hOpen?'open':''}" id="history-${a.id}">`;
+    a.history.forEach(hi=>{
+      h+=`<div class="history-year">${hi.year}년</div>`;
+      h+=`<div class="history-detail">${hi.summary||''}${hi.budget?'<br>예산: '+hi.budget:''}${hi.sejongResult?'<br>세종국악: '+hi.sejongResult:''}</div>`;
     });
-    if(a.references && a.references.length > 0){
-      html += `<div style="font-size:12px;font-weight:600;color:var(--text);margin:8px 0 4px;">📰 관련 자료</div>`;
-      a.references.forEach(r => {
-        html += `<div class="ref-item"><a href="${r.url}" target="_blank">${r.title}</a> <span style="color:var(--text-3);font-size:10px;">${r.type||''} ${r.date||''}</span></div>`;
-      });
+    if(a.references&&a.references.length>0){
+      h+=`<div style="font-size:12px;font-weight:600;margin:8px 0 4px;">📰 관련 자료</div>`;
+      a.references.forEach(r=>{h+=`<div class="ref-item"><a href="${r.url}" target="_blank">${r.title}</a> <span style="color:var(--text-3);font-size:10px;">${r.type||''} ${r.date||''}</span></div>`;});
     }
-    html += `</div>`;
+    h+=`</div></div>`;
   }
+  h+=`</div>`;
 
-  html += `</div>`; // end detail-panel
-  return html;
+  // 토글 버튼
+  h+=`<button class="expand-toggle" onclick="toggleExpand(${a.id})">${isExpanded?'▲ 접기':'▼ 상세 정보 더보기'}</button>`;
+
+  h+=`</div>`;
+  return h;
 }
 
+// ===== RENDER =====
 function renderList(){
-  const active = getActiveAnnouncements();
-  let filtered = applyFilters(active);
-  filtered = sortList(filtered);
-
-  const stats = {
-    total: active.length,
-    urgent: active.filter(a => { const d = getDday(a.deadlineDate); return d !== null && d >= 0 && d <= 7; }).length,
-    memo: Object.keys(memos).filter(k => memos[k]).length
+  const active=getActive();
+  let filtered=sortList(applyFilters(active));
+  const stats={
+    total:active.length,
+    urgent:active.filter(a=>{const d=getDday(a.deadlineDate);return d!==null&&d>=0&&d<=7;}).length,
+    memo:Object.keys(memos).filter(k=>memos[k]).length
   };
-  document.getElementById('header-stats').innerHTML =
-    `접수중 <strong>${stats.total}</strong>건 · 이번주 마감 <strong>${stats.urgent}</strong>건 · 메모 <strong>${stats.memo}</strong>건`;
+  document.getElementById('s-total').textContent=stats.total;
+  document.getElementById('s-urgent').textContent=stats.urgent;
+  document.getElementById('s-memo').textContent=stats.memo;
 
-  if(filtered.length === 0){
-    document.getElementById('main-list').innerHTML = `<div class="empty-msg">${searchQuery ? '검색 결과가 없습니다' : '접수중인 공고가 없습니다'}</div>`;
+  if(!filtered.length){
+    document.getElementById('main-list').innerHTML=`<div class="empty-msg">${searchQuery?'검색 결과가 없습니다':'접수중인 공고가 없습니다'}</div>`;
     return;
   }
-
-  document.getElementById('main-list').innerHTML = filtered.map(a => renderListItem(a, true)).join('');
+  document.getElementById('main-list').innerHTML=filtered.map(a=>renderCard(a,true)).join('');
 }
 
 function renderClosed(){
-  const closed = getClosedAnnouncements();
-  if(closed.length === 0){
-    document.getElementById('closed-list').innerHTML = '<div class="empty-msg">마감된 공고가 없습니다</div>';
-  } else {
-    document.getElementById('closed-list').innerHTML = closed.map(a => renderListItem(a, false)).join('');
-  }
-
-  // sources
-  document.getElementById('source-list').innerHTML = sources.map(s => `
+  const closed=getClosed();
+  document.getElementById('closed-list').innerHTML=closed.length?closed.map(a=>renderCard(a,false)).join(''):'<div class="empty-msg">마감된 공고가 없습니다</div>';
+  document.getElementById('source-list').innerHTML=sources.map(s=>`
     <div class="source-item" onclick="window.open('https://${s.url}','_blank')">
-      <div>
-        <div class="src-name">${s.name}</div>
-        <div class="src-note">${s.note}</div>
-        <div class="src-url">${s.url}</div>
-      </div>
+      <div><div class="src-name">${s.name}</div><div class="src-note">${s.note}</div><div class="src-url">${s.url} →</div></div>
       <div class="src-type">${s.type}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 // ===== CALENDAR =====
 function renderCalendar(){
-  const y = calMonth.getFullYear();
-  const m = calMonth.getMonth();
-  document.getElementById('cal-month-label').textContent = `${y}년 ${m+1}월`;
-
-  const firstDay = new Date(y, m, 1).getDay(); // 0=Sun
-  const daysInMonth = new Date(y, m+1, 0).getDate();
-  const daysInPrev = new Date(y, m, 0).getDate();
-
-  // events by date
-  const events = {};
-  announcements.filter(a => !a.closed && a.deadlineDate).forEach(a => {
-    const d = a.deadlineDate;
-    if(!events[d]) events[d] = [];
-    events[d].push(a);
+  const y=calMonth.getFullYear(),m=calMonth.getMonth();
+  document.getElementById('cal-month-label').textContent=`${y}년 ${m+1}월`;
+  const firstDay=new Date(y,m,1).getDay();
+  const dim=new Date(y,m+1,0).getDate();
+  const dimPrev=new Date(y,m,0).getDate();
+  const events={};
+  announcements.filter(a=>!a.closed&&a.deadlineDate).forEach(a=>{
+    if(!events[a.deadlineDate]) events[a.deadlineDate]=[];
+    events[a.deadlineDate].push(a);
   });
-
-  let html = '';
-  const dayNames = ['일','월','화','수','목','금','토'];
-  dayNames.forEach(d => { html += `<div class="cal-header">${d}</div>`; });
-
-  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
-
-  for(let i = 0; i < totalCells; i++){
-    const dayNum = i - firstDay + 1;
-    let cellClass = 'cal-cell';
-    let dateStr = '';
-    let dayDisplay = '';
-
-    if(dayNum < 1){
-      cellClass += ' other-month';
-      dayDisplay = daysInPrev + dayNum;
-    } else if(dayNum > daysInMonth){
-      cellClass += ' other-month';
-      dayDisplay = dayNum - daysInMonth;
-    } else {
-      dayDisplay = dayNum;
-      const mm = String(m+1).padStart(2,'0');
-      const dd = String(dayNum).padStart(2,'0');
-      dateStr = `${y}-${mm}-${dd}`;
-      if(dateStr === TODAY_STR) cellClass += ' today cal-today-mark';
-    }
-
-    html += `<div class="${cellClass}">`;
-    html += `<div class="cal-day">${dayDisplay}</div>`;
-
-    if(dateStr && events[dateStr]){
-      events[dateStr].forEach(a => {
-        const dday = getDday(a.deadlineDate);
-        let evtCls = 'normal';
-        if(dday !== null && dday <= 3) evtCls = 'urgent';
-        else if(dday !== null && dday <= 7) evtCls = 'soon';
-        html += `<div class="cal-event ${evtCls}" onclick="switchTab('list');setTimeout(()=>{toggleDetail(${a.id});scrollToItem(${a.id})},100)" title="${a.title}">${a.title.substring(0,12)}</div>`;
+  let h='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{h+=`<div class="cal-header">${d}</div>`;});
+  const total=Math.ceil((firstDay+dim)/7)*7;
+  for(let i=0;i<total;i++){
+    const dn=i-firstDay+1;
+    let cls='cal-cell',ds='',dd='';
+    if(dn<1){cls+=' other-month';dd=dimPrev+dn;}
+    else if(dn>dim){cls+=' other-month';dd=dn-dim;}
+    else{dd=dn;ds=`${y}-${String(m+1).padStart(2,'0')}-${String(dn).padStart(2,'0')}`;if(ds===TODAY_STR)cls+=' today cal-today-mark';}
+    h+=`<div class="${cls}"><div class="cal-day">${dd}</div>`;
+    if(ds&&events[ds]){
+      events[ds].forEach(a=>{
+        const dday=getDday(a.deadlineDate);
+        let ec='normal';if(dday!==null&&dday<=3)ec='urgent';else if(dday!==null&&dday<=7)ec='soon';
+        h+=`<div class="cal-event ${ec}" onclick="switchTab('list');setTimeout(()=>{expandedIds.add(${a.id});renderList();document.getElementById('card-${a.id}')&&document.getElementById('card-${a.id}').scrollIntoView({behavior:'smooth',block:'center'})},150)" title="${a.title}">${a.title.substring(0,10)}</div>`;
       });
     }
-    html += `</div>`;
+    h+=`</div>`;
   }
-
-  document.getElementById('cal-grid').innerHTML = html;
+  document.getElementById('cal-grid').innerHTML=h;
 }
 
-function calNav(d){ calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth()+d, 1); renderCalendar(); }
-function calGoToday(){ calMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1); renderCalendar(); }
+function calNav(d){calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+d,1);renderCalendar();}
+function calGoToday(){calMonth=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);renderCalendar();}
 
 // ===== ACTIONS =====
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach((x,i) => x.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
-  // activate tab button
-  const tabNames = ['list','calendar','closed'];
-  const idx = tabNames.indexOf(t);
-  if(idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
-  if(t === 'calendar') renderCalendar();
-  if(t === 'closed') renderClosed();
+  const idx=['list','calendar','closed'].indexOf(t);
+  if(idx>=0)document.querySelectorAll('.tab')[idx].classList.add('active');
+  if(t==='calendar')renderCalendar();
+  if(t==='closed')renderClosed();
 }
-
-function toggleDetail(id, evt){
-  if(evt && (evt.target.closest('.memo-btn') || evt.target.closest('.memo-input') || evt.target.closest('.detail-actions') || evt.target.closest('.history-toggle') || evt.target.closest('.history-content'))) return;
-  openDetailId = openDetailId === id ? null : id;
+function toggleExpand(id){
+  if(expandedIds.has(id)) expandedIds.delete(id); else expandedIds.add(id);
   renderList();
 }
-
-function toggleHistory(id, evt){
-  if(evt) evt.stopPropagation();
-  openHistoryId = openHistoryId === id ? null : id;
+function toggleHistory(id,evt){
+  if(evt)evt.stopPropagation();
+  openHistoryId=openHistoryId===id?null:id;
   renderList();
 }
-
-function scrollToItem(id){
-  const items = document.querySelectorAll('.list-item');
-  items.forEach(el => {
-    if(el.getAttribute('onclick') && el.getAttribute('onclick').includes(id)){
-      el.scrollIntoView({behavior:'smooth', block:'center'});
-    }
-  });
-}
-
-function onSearch(){
-  searchQuery = document.getElementById('search-input').value.trim().toLowerCase();
-  renderList();
-}
-
+function onSearch(){searchQuery=document.getElementById('search-input').value.trim().toLowerCase();renderList();}
 function toggleFilter(key){
-  if(key === 'danche'){
-    filters.danche = !filters.danche;
-    if(filters.danche) filters.gaein = false;
-  } else if(key === 'gaein'){
-    filters.gaein = !filters.gaein;
-    if(filters.gaein) filters.danche = false;
-  } else {
-    filters[key] = !filters[key];
-  }
-  document.getElementById('tgl-danche').classList.toggle('on', filters.danche);
-  document.getElementById('tgl-gaein').classList.toggle('on', filters.gaein);
-  document.getElementById('tgl-verified').classList.toggle('on', filters.verified);
+  if(key==='danche'){filters.danche=!filters.danche;if(filters.danche)filters.gaein=false;}
+  else if(key==='gaein'){filters.gaein=!filters.gaein;if(filters.gaein)filters.danche=false;}
+  else{filters[key]=!filters[key];}
+  document.getElementById('tgl-danche').classList.toggle('on',filters.danche);
+  document.getElementById('tgl-gaein').classList.toggle('on',filters.gaein);
+  document.getElementById('tgl-verified').classList.toggle('on',filters.verified);
   renderList();
 }
-
-function startEditMemo(id, evt){
-  if(evt) evt.stopPropagation();
-  const input = document.getElementById('memo-input-' + id);
-  if(input){
-    input.style.display = 'block';
-    input.focus();
-  }
+function startEditMemo(id,evt){
+  if(evt)evt.stopPropagation();
+  const input=document.getElementById('memo-input-'+id);
+  if(input){input.style.display='block';input.focus();}
 }
-
 function saveMemoFromInput(id){
-  const input = document.getElementById('memo-input-' + id);
-  if(!input) return;
-  const text = input.value.trim();
-  input.style.display = 'none';
-  if(text){
-    saveMemo(id, text);
-    showToast('메모 저장됨');
-  } else {
-    deleteMemo(id);
-  }
+  const input=document.getElementById('memo-input-'+id);
+  if(!input)return;
+  const text=input.value.trim();
+  input.style.display='none';
+  if(text){saveMemo(id,text);showToast('메모 저장됨');}
+  else{deleteMemo(id);}
   renderList();
 }
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escAttr(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function renderAll(){renderList();}
 
-function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escAttr(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-// ===== RENDER ALL =====
-function renderAll(){
-  renderList();
-}
-
-// ===== INIT =====
 loadMemos();
 </script>
 </body>
