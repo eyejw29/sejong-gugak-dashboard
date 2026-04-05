@@ -2,22 +2,53 @@ name: 매일 이메일 공고 알림 발송
 
 on:
   schedule:
-    - cron: '30 0 * * *'
+    # 매일 오전 11:00 KST (UTC 02:00)
+    - cron: '0 2 * * *'
+    # 예비: 오후 1:00 KST (UTC 04:00) — 오전 미발송 시
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 jobs:
   send-email:
     runs-on: ubuntu-latest
     steps:
+      - name: 오전 발송 여부 확인 (13시 예비용)
+        id: check_duplicate
+        run: |
+          TRIGGER="${{ github.event.schedule }}"
+          echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
+
+          if [ "$TRIGGER" = "0 4 * * *" ]; then
+            echo "13시 예비 스케줄 — 오전 발송 여부 확인 중..."
+            TODAY=$(date -u +%Y-%m-%dT00:00:00Z)
+            RUNS=$(curl -sf \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${{ github.repository }}/actions/workflows/daily-email-alert.yml/runs?status=success&created>=$TODAY&per_page=5")
+            SUCCESS_COUNT=$(echo "$RUNS" | jq '[.workflow_runs[] | select(.run_started_at >= "'$TODAY'")] | length')
+            if [ "$SUCCESS_COUNT" -gt "0" ]; then
+              echo "skip=true" >> $GITHUB_OUTPUT
+              echo "오전에 이미 발송 성공. 예비 발송 스킵."
+            else
+              echo "skip=false" >> $GITHUB_OUTPUT
+              echo "오전 발송 실패 감지! 예비 발송 진행."
+            fi
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "오전 11:00 정규 스케줄 실행"
+          fi
+
       - name: 레포 체크아웃
+        if: steps.check_duplicate.outputs.skip != 'true'
         uses: actions/checkout@v4
 
       - name: 이메일 작성 및 발송
+        if: steps.check_duplicate.outputs.skip != 'true'
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GMAIL_SENDER: "eyejw29@gmail.com"
-          GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
+          GMAIL_RECIPIENT: "sejong-8784@hanmail.net, eyejw29@gmail.com"
           DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          IS_BACKUP: ${{ github.event.schedule == '0 4 * * *' }}
         run: |
           python3 << 'PYEOF'
           import json, smtplib, os, sys
@@ -26,9 +57,10 @@ jobs:
           from datetime import datetime
 
           SENDER = os.environ["GMAIL_SENDER"]
-          RECIPIENT = os.environ["GMAIL_RECIPIENT"]
+          RECIPIENTS = os.environ["GMAIL_RECIPIENT"]
           APP_PW = os.environ.get("GMAIL_APP_PASSWORD", "")
           DASHBOARD = os.environ["DASHBOARD_URL"]
+          IS_BACKUP = os.environ.get("IS_BACKUP", "false") == "true"
 
           if not APP_PW:
               print("[오류] GMAIL_APP_PASSWORD 시크릿 미설정")
@@ -70,7 +102,8 @@ jobs:
               if d == 0: return "D-0 (오늘 마감!)"
               return f"D-{d}"
 
-          lines = [f"🎵 세종국악관현악단 — 공고 알림", "", f"{today} ({weekday}) 기준"]
+          backup_tag = " (예비발송)" if IS_BACKUP else ""
+          lines = [f"🎵 세종국악관현악단 — 공고 알림{backup_tag}", "", f"{today} ({weekday}) 기준"]
 
           if urgent:
               lines += ["", f"🔴 마감 임박 ({len(urgent)}건)"]
@@ -99,11 +132,12 @@ jobs:
           if active: parts.append(f"진행중 {len(active)}건")
           detail = " + ".join(parts) if parts else ""
           subject = f"[세종국악] 공고 알림 — {today} ({detail})" if detail else f"[세종국악] 공고 알림 — {today}"
+          if IS_BACKUP: subject += " (예비발송)"
 
           msg = MIMEMultipart("alternative")
           msg["Subject"] = subject
           msg["From"] = f"세종국악 공고알림 <{SENDER}>"
-          msg["To"] = RECIPIENT
+          msg["To"] = RECIPIENTS
           msg.attach(MIMEText(body, "plain", "utf-8"))
 
           try:
@@ -111,9 +145,13 @@ jobs:
                   server.starttls()
                   server.login(SENDER, APP_PW)
                   server.send_message(msg)
-              print(f"[성공] 이메일 발송 완료 → {RECIPIENT}")
+              print(f"[성공] 이메일 발송 완료 → {RECIPIENTS}")
           except smtplib.SMTPAuthenticationError:
               print("[오류] Gmail 인증 실패"); sys.exit(1)
           except Exception as e:
               print(f"[오류] 발송 실패: {e}"); sys.exit(1)
           PYEOF
+
+      - name: 발송 스킵 알림
+        if: steps.check_duplicate.outputs.skip == 'true'
+        run: echo "오전에 이미 발송 완료. 예비 발송 불필요."
