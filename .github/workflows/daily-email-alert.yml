@@ -1,0 +1,119 @@
+name: 매일 이메일 공고 알림 발송
+
+on:
+  schedule:
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 레포 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 이메일 작성 및 발송
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_SENDER: "eyejw29@gmail.com"
+          GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
+          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+        run: |
+          python3 << 'PYEOF'
+          import json, smtplib, os, sys
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          from datetime import datetime
+
+          SENDER = os.environ["GMAIL_SENDER"]
+          RECIPIENT = os.environ["GMAIL_RECIPIENT"]
+          APP_PW = os.environ.get("GMAIL_APP_PASSWORD", "")
+          DASHBOARD = os.environ["DASHBOARD_URL"]
+
+          if not APP_PW:
+              print("[오류] GMAIL_APP_PASSWORD 시크릿 미설정")
+              sys.exit(1)
+
+          with open("data/announcements.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print(f"전체 공고: {len(data)}건")
+
+          today = datetime.now().strftime("%Y-%m-%d")
+          weekday = ["월","화","수","목","금","토","일"][datetime.now().weekday()]
+          urgent, active, closed = [], [], []
+
+          for item in data:
+              if item.get("closed", False):
+                  closed.append(item); continue
+              deadline = item.get("deadlineDate")
+              if not deadline:
+                  active.append(item); continue
+              try:
+                  d_day = (datetime.strptime(deadline, "%Y-%m-%d") - datetime.now()).days
+                  item["_dday"] = d_day
+                  if d_day < 0: closed.append(item)
+                  elif d_day <= 3: urgent.append(item)
+                  else: active.append(item)
+              except: active.append(item)
+
+          urgent.sort(key=lambda x: x.get("_dday", 999))
+          active.sort(key=lambda x: x.get("_dday", 999))
+          print(f"마감임박: {len(urgent)}건 | 진행중: {len(active)}건 | 마감: {len(closed)}건")
+
+          if not urgent and not active:
+              print("[스킵] 진행중 공고 없음"); sys.exit(0)
+
+          def fmt_dday(item):
+              d = item.get("_dday")
+              if d is None: return "미정"
+              if d == 0: return "D-0 (오늘 마감!)"
+              return f"D-{d}"
+
+          lines = [f"🎵 세종국악관현악단 — 공고 알림", "", f"{today} ({weekday}) 기준"]
+
+          if urgent:
+              lines += ["", f"🔴 마감 임박 ({len(urgent)}건)"]
+              for item in urgent:
+                  lines += ["", f"▸ {item['title']}", f"  🏛 {item.get('org','')} · {fmt_dday(item)}"]
+                  budget = f" | 예산: {item.get('budget','확인필요')}" if item.get('budget') else ""
+                  lines.append(f"  마감: {item.get('deadlineDate','미정')}{budget}")
+                  if item.get("applyUrl"): lines.append(f"  📎 공고: {item['applyUrl']}")
+                  lines.append(f"  {'✅ 검증완료' if item.get('verified') else '⚠️ 미검증'}")
+                  if item.get("note"): lines.append(f"  {item['note']}")
+
+          if active:
+              lines += ["", f"🟢 진행중 공고 ({len(active)}건)"]
+              for item in active:
+                  dday = fmt_dday(item)
+                  budget = f" | {item['budget']}" if item.get('budget') else ""
+                  star = "⭐ " if item.get('relevance') == 'high' else ""
+                  lines.append(f"  {star}• {item['title']} — {item.get('org','')} (마감: {item.get('deadlineDate','미정')}, {dday}){budget}")
+                  if item.get("note"): lines.append(f"    {item['note']}")
+
+          lines += ["", "─" * 30, "", f"대시보드: {DASHBOARD}", "※ 이 메일은 자동 생성된 알림입니다."]
+          body = "\n".join(lines)
+
+          parts = []
+          if urgent: parts.append(f"마감임박 {len(urgent)}건")
+          if active: parts.append(f"진행중 {len(active)}건")
+          detail = " + ".join(parts) if parts else ""
+          subject = f"[세종국악] 공고 알림 — {today} ({detail})" if detail else f"[세종국악] 공고 알림 — {today}"
+
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = subject
+          msg["From"] = f"세종국악 공고알림 <{SENDER}>"
+          msg["To"] = RECIPIENT
+          msg.attach(MIMEText(body, "plain", "utf-8"))
+
+          try:
+              with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                  server.starttls()
+                  server.login(SENDER, APP_PW)
+                  server.send_message(msg)
+              print(f"[성공] 이메일 발송 완료 → {RECIPIENT}")
+          except smtplib.SMTPAuthenticationError:
+              print("[오류] Gmail 인증 실패"); sys.exit(1)
+          except Exception as e:
+              print(f"[오류] 발송 실패: {e}"); sys.exit(1)
+          PYEOF
