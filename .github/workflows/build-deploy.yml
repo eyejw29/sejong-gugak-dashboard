@@ -7,7 +7,7 @@ on:
       - 'data/**'
       - 'templates/**'
       - 'scripts/**'
-  workflow_dispatch:  # 수동 실행 버튼
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -24,10 +24,47 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: JSON 데이터 검증
+        run: |
+          echo "=== JSON 검증 ==="
+          python3 -c "
+          import json, sys
+          errors = []
+          for f in ['data/announcements.json', 'data/sources.json']:
+              try:
+                  with open(f, 'r', encoding='utf-8') as fh:
+                      data = json.load(fh)
+                  print(f'OK {f}: {len(data)}건 정상')
+              except Exception as e:
+                  errors.append(f'{f}: {e}')
+                  print(f'FAIL {f}: {e}')
+          if errors:
+              print('JSON 검증 실패 - 빌드를 중단합니다')
+              sys.exit(1)
+          print('모든 JSON 파일 검증 통과')
+          "
+
       - name: 대시보드 빌드
         run: python scripts/build.py --data-dir data --template templates/dashboard.html --output index.html
 
-      - name: 변경사항 커밋 & 푸시
+      - name: 빌드 결과 검증
+        run: |
+          echo "=== 빌드 결과 검증 ==="
+          FILE_SIZE=$(stat -c%s index.html 2>/dev/null || echo 0)
+          echo "파일 크기: ${FILE_SIZE} bytes"
+          if [ "$FILE_SIZE" -lt 10000 ]; then
+            echo "FAIL index.html이 너무 작습니다. 빌드 오류 가능성"
+            exit 1
+          fi
+          if grep -q "세종국악" index.html; then
+            echo "OK 한글 콘텐츠 정상 포함"
+          else
+            echo "FAIL 한글 콘텐츠 없음. 인코딩 문제 가능성"
+            exit 1
+          fi
+          echo "OK 빌드 결과 검증 통과"
+
+      - name: 변경사항 커밋 and 푸시
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
