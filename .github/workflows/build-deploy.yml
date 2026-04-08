@@ -26,23 +26,23 @@ jobs:
 
       - name: JSON 데이터 검증
         run: |
-        python3 << 'PYEOF'
-        import json, sys, os
-        os.environ['PYTHONIOENCODING'] = 'utf-8'
-        errors = []
-        for f in ['data/announcements.json', 'data/sources.json']:
-            try:
-                with open(f, 'r', encoding='utf-8') as fh:
-                    data = json.load(fh)
-                print('OK %s: %d items' % (f, len(data)))
-            except Exception as e:
-                errors.append('%s: %s' % (f, str(e)))
-                print('FAIL %s: %s' % (f, str(e)))
-        if errors:
-            print('JSON validation failed')
-            sys.exit(1)
-        print('All JSON files validated')
-        PYEOF
+          python3 << 'PYEOF'
+          import json, sys, os
+          os.environ['PYTHONIOENCODING'] = 'utf-8'
+          errors = []
+          for f in ['data/announcements.json', 'data/sources.json']:
+              try:
+                  with open(f, 'r', encoding='utf-8') as fh:
+                      data = json.load(fh)
+                  print('OK %s: %d items' % (f, len(data)))
+              except Exception as e:
+                  errors.append('%s: %s' % (f, str(e)))
+                  print('FAIL %s: %s' % (f, str(e)))
+          if errors:
+              print('JSON validation failed')
+              sys.exit(1)
+          print('All JSON files validated')
+          PYEOF
 
       - name: 대시보드 빌드
         run: python scripts/build.py --data-dir data --template templates/dashboard.html --output index.html
