@@ -25,7 +25,7 @@ jobs:
           python-version: '3.11'
 
       - name: JSON 데이터 검증
-      run: |
+        run: |
         python3 << 'PYEOF'
         import json, sys, os
         os.environ['PYTHONIOENCODING'] = 'utf-8'
