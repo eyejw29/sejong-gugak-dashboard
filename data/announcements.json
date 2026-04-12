@@ -126,7 +126,7 @@
       "공연",
       "단체"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "id": 6,
@@ -233,7 +233,7 @@
       "국제교류",
       "단체"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "id": 10,
@@ -442,7 +442,7 @@
       "금융지원",
       "단체"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "id": 107,
