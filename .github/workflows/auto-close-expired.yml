@@ -1,0 +1,58 @@
+name: Auto-close expired announcements
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 09:00 KST (UTC 0:00)
+  workflow_dispatch:
+
+jobs:
+  auto-close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Auto-close expired announcements
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          from datetime import datetime
+
+          today = datetime.now().strftime("%Y-%m-%d")
+          print(f"[{today}] 마감 공고 자동 closed 처리 시작")
+
+          with open("data/announcements.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          changed = []
+          for item in data:
+              if item.get("closed", False):
+                  continue
+              deadline = item.get("deadlineDate")
+              if not deadline:
+                  continue
+              try:
+                  if deadline < today:
+                      item["closed"] = True
+                      changed.append(f"  id={item['id']}: {item['title']} (마감: {deadline})")
+              except (ValueError, TypeError):
+                  pass
+
+          if changed:
+              with open("data/announcements.json", "w", encoding="utf-8") as f:
+                  json.dump(data, f, ensure_ascii=False, indent=2)
+              print(f"[OK] {len(changed)}건 closed 처리:")
+              for c in changed:
+                  print(c)
+          else:
+              print("[OK] 변경 없음 — 마감된 공고 없음")
+          PYTHON_SCRIPT
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet data/announcements.json || (
+            git add data/announcements.json
+            git commit -m "자동: 마감 공고 closed 처리 ($(date +%Y-%m-%d))"
+            git push
+          )
