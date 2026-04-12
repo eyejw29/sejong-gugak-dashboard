@@ -5,6 +5,9 @@ on:
     - cron: '0 0 * * *'  # 매일 09:00 KST (UTC 0:00)
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   auto-close:
     runs-on: ubuntu-latest
