@@ -50,12 +50,31 @@ jobs:
               print("[OK] 변경 없음 — 마감된 공고 없음")
           PYTHON_SCRIPT
 
-      - name: Commit changes
+      - name: Commit announcement changes
+        id: commit-data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git diff --quiet data/announcements.json || (
+          if git diff --quiet data/announcements.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "변경 없음 — 스킵"
+          else
             git add data/announcements.json
             git commit -m "자동: 마감 공고 closed 처리 ($(date +%Y-%m-%d))"
             git push
-          )
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rebuild dashboard (build.py)
+        if: steps.commit-data.outputs.changed == 'true'
+        run: |
+          python3 scripts/build.py --data-dir data --template templates/dashboard.html --output index.html
+
+      - name: Commit rebuilt dashboard
+        if: steps.commit-data.outputs.changed == 'true'
+        run: |
+          git add index.html
+          if ! git diff --cached --quiet index.html; then
+            git commit -m "자동: 대시보드 리빌드 ($(date +%Y-%m-%d))"
+            git push
+          fi
