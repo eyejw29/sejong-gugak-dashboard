@@ -23,6 +23,7 @@ jobs:
           GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
           GMAIL_CC: "eyejw29@gmail.com"
           DASHBOARD_URL: "https://admin.sejonggugak.com/#/notices-monitor"
+          EXTRA_RECIPIENTS: ${{ secrets.EXTRA_RECIPIENTS }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
@@ -104,7 +105,8 @@ jobs:
               f"",
               f"{'─'*40}",
               f"",
-              f"대시보드: {DASHBOARD}",
+              f"📋 자세한 내용은 관리자 페이지에서 확인하세요",
+              f"   {DASHBOARD}",
               f"※ 임박 항목이 있을 때만 발송됩니다. (D-7/D-3/D-1/D-0)",
           ]
           body = "\n".join(lines)
@@ -126,7 +128,12 @@ jobs:
               msg["Cc"] = CC
           msg.attach(MIMEText(body, "plain", "utf-8"))
 
-          recipients = [RECIPIENT] + ([CC] if CC else [])
+          # 2026-05-11: EXTRA_RECIPIENTS Secrets 콤마 구분 — 담당자 개인 메일 추가
+          extras = [e.strip() for e in (os.environ.get("EXTRA_RECIPIENTS") or "").split(",") if e.strip()]
+          recipients = [RECIPIENT] + ([CC] if CC else []) + extras
+          if extras:
+              # BCC로 추가 (TO/CC에 노출 안 시킴)
+              msg["Bcc"] = ", ".join(extras)
           try:
               with smtplib.SMTP("smtp.gmail.com", 587) as server:
                   server.starttls()
