@@ -134,7 +134,7 @@ jobs:
           GMAIL_SENDER: "eyejw29@gmail.com"
           GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
           GMAIL_CC: "eyejw29@gmail.com"
-          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          DASHBOARD_URL: "https://admin.sejonggugak.com/#/notices-monitor"
           REASON: ${{ steps.reason.outputs.value }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -185,26 +185,26 @@ jobs:
               for it in new_items:
                   lines.append("")
                   lines.append(f"▸ {it.get('title','(제목없음)')}")
-                  lines.append(f"  🏛 {it.get('org','')}  ·  마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'}")
-                  if it.get('budget'):
-                      lines.append(f"  💰 {it['budget']}")
+                  org_line = f"  🏛 {it.get('org','')}  ·  마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'}"
                   if it.get('relevance') == 'high':
-                      lines.append(f"  ⭐ 핵심 매칭 후보")
+                      org_line += "  ·  ⭐ 핵심 매칭"
+                  lines.append(org_line)
                   if it.get('applyUrl'):
                       lines.append(f"  📎 {it['applyUrl']}")
-                  tag = "✅ 검증완료" if it.get('verified') else "⚠️ 미검증"
-                  lines.append(f"  {tag}")
-                  if it.get('note'):
-                      lines.append(f"  💬 {it['note']}")
 
+          # 변경 항목은 decision 필드 변경만 노출 (담당자 의사결정 결과 공유 목적)
+          DISPLAY_FIELDS = {"decision": "의사결정", "result": "결과", "deadline": "마감(표시)", "deadlineDate": "마감일", "closed": "마감여부"}
           if changed_items:
               lines.append("")
               lines.append(f"✏️ 변경된 공고 ({len(changed_items)}건)")
               for it in changed_items:
+                  visible_diffs = [d for d in it.get("_diffs", []) if d['field'] in DISPLAY_FIELDS]
+                  if not visible_diffs:
+                      continue
                   lines.append("")
                   lines.append(f"▸ {it.get('title','(제목없음)')} (id={it.get('id')})")
-                  for d in it.get("_diffs", []):
-                      lines.append(f"  · {label(d['field'])}: {d['before']!r} → {d['after']!r}")
+                  for d in visible_diffs:
+                      lines.append(f"  · {DISPLAY_FIELDS[d['field']]}: {d['before']!r} → {d['after']!r}")
                   if it.get('applyUrl'):
                       lines.append(f"  📎 {it['applyUrl']}")
 
