@@ -16,10 +16,10 @@ jobs:
   diff-and-send:
     runs-on: ubuntu-latest
     steps:
-      - name: 레포 체크아웃 (직전 커밋까지 비교 가능하게)
+      - name: 레포 체크아웃 (announcements.json 변경 이력 추적 가능하게)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: 발송 사유 추출 (push 이벤트면 commit message에서)
         id: reason
@@ -44,18 +44,41 @@ jobs:
           python3 << 'PYEOF'
           import json, subprocess, os
 
-          # HEAD~1 의 announcements.json 추출
+          # announcements.json 을 *실제로 변경한* 가장 최근 2개 commit 찾기
+          # (fetch-depth:0 이라 전체 history 가져옴)
           try:
+              log = subprocess.check_output(
+                  ["git", "log", "-20", "--pretty=%H", "--", "data/announcements.json"],
+                  stderr=subprocess.DEVNULL,
+              ).decode().strip().split("\n")
+              log = [c for c in log if c]
+          except Exception:
+              log = []
+
+          # 현재(가장 최근) 변경 commit
+          if log:
+              cur_raw = subprocess.check_output(
+                  ["git", "show", f"{log[0]}:data/announcements.json"],
+                  stderr=subprocess.DEVNULL,
+              )
+              cur = json.loads(cur_raw)
+              print(f"[diff] 현재 변경 commit: {log[0][:10]}")
+          else:
+              with open("data/announcements.json", "r", encoding="utf-8") as f:
+                  cur = json.load(f)
+              print("[diff] git log 비어있음 — working tree 사용")
+
+          # 직전 변경 commit
+          if len(log) >= 2:
               prev_raw = subprocess.check_output(
-                  ["git", "show", "HEAD~1:data/announcements.json"],
+                  ["git", "show", f"{log[1]}:data/announcements.json"],
                   stderr=subprocess.DEVNULL,
               )
               prev = json.loads(prev_raw)
-          except Exception:
+              print(f"[diff] 직전 변경 commit: {log[1][:10]}")
+          else:
               prev = []
-
-          with open("data/announcements.json", "r", encoding="utf-8") as f:
-              cur = json.load(f)
+              print("[diff] 직전 변경 commit 없음 — 모든 항목을 신규로 간주")
 
           prev_by_id = {x.get("id"): x for x in prev}
           cur_by_id  = {x.get("id"): x for x in cur}
