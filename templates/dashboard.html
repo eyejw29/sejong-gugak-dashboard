@@ -478,7 +478,7 @@ function renderCard(a, showMemo){
   h+=`<div class="card-actions">`;
   const linkUrl=a.verifyUrl||a.applyUrl;
   if(linkUrl) h+=`<a href="${linkUrl}" target="_blank" class="btn-primary">🔗 원문 보기</a>`;
-  if(a.deadlineDate&&getDday(a.deadlineDate)>=0) h+=`<button class="btn-secondary" onclick="downloadIcs(announcements.find(x=>x.id===${a.id}));event.stopPropagation();">📅 캘린더 추가</button>`;
+  // 2026-05-10: 캘린더 추가 버튼 제거 (오은재 담당자 명령, 미사용)
   h+=`</div></div>`;
 
   // 접이식: 상세 정보
