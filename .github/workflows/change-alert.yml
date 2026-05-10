@@ -1,4 +1,4 @@
-name: ?좉퇋쨌蹂寃?怨듦퀬 ?뚮┝
+name: 신규·변경 공고 알림
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       reason:
-        description: '諛쒖넚 ?ъ쑀 (cowork-collect / monthly-review / manual ??'
+        description: '발송 사유 (cowork-collect / monthly-review / manual 등)'
         required: false
         default: 'manual'
 
@@ -16,12 +16,12 @@ jobs:
   diff-and-send:
     runs-on: ubuntu-latest
     steps:
-      - name: ?덊룷 泥댄겕?꾩썐 (吏곸쟾 而ㅻ컠源뚯? 鍮꾧탳 媛?ν븯寃?
+      - name: 레포 체크아웃 (직전 커밋까지 비교 가능하게)
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: 諛쒖넚 ?ъ쑀 異붿텧 (push ?대깽?몃㈃ commit message?먯꽌)
+      - name: 발송 사유 추출 (push 이벤트면 commit message에서)
         id: reason
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
@@ -36,15 +36,15 @@ jobs:
             [ -z "$R" ] && R="manual"
           fi
           echo "value=$R" >> $GITHUB_OUTPUT
-          echo "  ??reason: $R"
+          echo "  → reason: $R"
 
-      - name: announcements.json diff 異붿텧
+      - name: announcements.json diff 추출
         id: diff
         run: |
           python3 << 'PYEOF'
           import json, subprocess, os
 
-          # HEAD~1 ??announcements.json 異붿텧
+          # HEAD~1 의 announcements.json 추출
           try:
               prev_raw = subprocess.check_output(
                   ["git", "show", "HEAD~1:data/announcements.json"],
@@ -60,10 +60,11 @@ jobs:
           prev_by_id = {x.get("id"): x for x in prev}
           cur_by_id  = {x.get("id"): x for x in cur}
 
-          # ?좉퇋 = ??ID
+          # 신규 = 새 ID
           new_items = [v for k, v in cur_by_id.items() if k not in prev_by_id]
 
-          # 蹂寃?= 湲곗〈 ID?몃뜲 ?댁슜 諛붾?寃?          TRACK_FIELDS = [
+          # 변경 = 기존 ID인데 내용 바뀐 것
+          TRACK_FIELDS = [
               "title", "deadline", "deadlineDate", "closed",
               "budget", "relevance", "applyUrl", "note", "verified",
               "decision", "result",
@@ -90,20 +91,20 @@ jobs:
           with open("diff_result.json", "w", encoding="utf-8") as f:
               json.dump(out, f, ensure_ascii=False)
 
-          print(f"?좉퇋: {len(new_items)}嫄?/ 蹂寃? {len(changed_items)}嫄?)
+          print(f"신규: {len(new_items)}건 / 변경: {len(changed_items)}건")
           # GitHub Actions output
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"new_count={len(new_items)}\n")
               f.write(f"changed_count={len(changed_items)}\n")
           PYEOF
 
-      - name: ?좉퇋쨌蹂寃??놁쑝硫?醫낅즺
+      - name: 신규·변경 없으면 종료
         if: steps.diff.outputs.new_count == '0' && steps.diff.outputs.changed_count == '0'
         run: |
-          echo "[?ㅽ궢] ?좉퇋쨌蹂寃?0嫄???諛쒖넚 ????
+          echo "[스킵] 신규·변경 0건 — 발송 안 함"
           exit 0
 
-      - name: 硫붿씪 諛쒖넚
+      - name: 메일 발송
         if: steps.diff.outputs.new_count != '0' || steps.diff.outputs.changed_count != '0'
         env:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -124,7 +125,7 @@ jobs:
           KST = timezone(timedelta(hours=9))
           now = datetime.now(KST)
           today = now.strftime("%Y-%m-%d")
-          weekday = ["??,"??,"??,"紐?,"湲?,"??,"??][now.weekday()]
+          weekday = ["월","화","수","목","금","토","일"][now.weekday()]
 
           with open("diff_result.json", "r", encoding="utf-8") as f:
               diff = json.load(f)
@@ -140,67 +141,67 @@ jobs:
 
           def label(field):
               return {
-                  "title": "?쒕ぉ", "deadline": "留덇컧(?쒖떆)", "deadlineDate": "留덇컧??,
-                  "closed": "留덇컧?щ?", "budget": "?덉궛", "relevance": "愿?⑤룄",
-                  "applyUrl": "?좎껌URL", "note": "鍮꾧퀬", "verified": "寃利?,
-                  "decision": "?섏궗寃곗젙", "result": "寃곌낵",
+                  "title": "제목", "deadline": "마감(표시)", "deadlineDate": "마감일",
+                  "closed": "마감여부", "budget": "예산", "relevance": "관련도",
+                  "applyUrl": "신청URL", "note": "비고", "verified": "검증",
+                  "decision": "의사결정", "result": "결과",
               }.get(field, field)
 
           lines = [
-              f"?렦 ?몄쥌援?븙 ???좉퇋쨌蹂寃?怨듦퀬 ?뚮┝",
+              f"🎵 세종국악 — 신규·변경 공고 알림",
               f"",
-              f"{today} ({weekday}) 쨌 ?ъ쑀: {REASON}",
-              f"?좉퇋 {len(new_items)}嫄?쨌 蹂寃?{len(changed_items)}嫄?,
+              f"{today} ({weekday}) · 사유: {REASON}",
+              f"신규 {len(new_items)}건 · 변경 {len(changed_items)}건",
               f"",
-              f"{'?'*40}",
+              f"{'─'*40}",
           ]
 
           if new_items:
               lines.append("")
-              lines.append(f"?넅 ?좉퇋 怨듦퀬 ({len(new_items)}嫄?")
+              lines.append(f"🆕 신규 공고 ({len(new_items)}건)")
               for it in new_items:
                   lines.append("")
-                  lines.append(f"??{it.get('title','(?쒕ぉ?놁쓬)')}")
-                  lines.append(f"  ?룢 {it.get('org','')}  쨌  留덇컧: {it.get('deadline') or it.get('deadlineDate') or '?뺤씤?꾩슂'}")
+                  lines.append(f"▸ {it.get('title','(제목없음)')}")
+                  lines.append(f"  🏛 {it.get('org','')}  ·  마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'}")
                   if it.get('budget'):
-                      lines.append(f"  ?뮥 {it['budget']}")
+                      lines.append(f"  💰 {it['budget']}")
                   if it.get('relevance') == 'high':
-                      lines.append(f"  狩??듭떖 留ㅼ묶 ?꾨낫")
+                      lines.append(f"  ⭐ 핵심 매칭 후보")
                   if it.get('applyUrl'):
-                      lines.append(f"  ?뱨 {it['applyUrl']}")
-                  tag = "??寃利앹셿猷? if it.get('verified') else "?좑툘 誘멸?利?
+                      lines.append(f"  📎 {it['applyUrl']}")
+                  tag = "✅ 검증완료" if it.get('verified') else "⚠️ 미검증"
                   lines.append(f"  {tag}")
                   if it.get('note'):
-                      lines.append(f"  ?뮠 {it['note']}")
+                      lines.append(f"  💬 {it['note']}")
 
           if changed_items:
               lines.append("")
-              lines.append(f"?륅툘 蹂寃쎈맂 怨듦퀬 ({len(changed_items)}嫄?")
+              lines.append(f"✏️ 변경된 공고 ({len(changed_items)}건)")
               for it in changed_items:
                   lines.append("")
-                  lines.append(f"??{it.get('title','(?쒕ぉ?놁쓬)')} (id={it.get('id')})")
+                  lines.append(f"▸ {it.get('title','(제목없음)')} (id={it.get('id')})")
                   for d in it.get("_diffs", []):
-                      lines.append(f"  쨌 {label(d['field'])}: {d['before']!r} ??{d['after']!r}")
+                      lines.append(f"  · {label(d['field'])}: {d['before']!r} → {d['after']!r}")
                   if it.get('applyUrl'):
-                      lines.append(f"  ?뱨 {it['applyUrl']}")
+                      lines.append(f"  📎 {it['applyUrl']}")
 
           lines += [
               f"",
-              f"{'?'*40}",
+              f"{'─'*40}",
               f"",
-              f"??쒕낫?? {DASHBOARD}",
-              f"???좉퇋/蹂寃?諛쒖깮 ?쒖뿉留?諛쒖넚?⑸땲??",
+              f"대시보드: {DASHBOARD}",
+              f"※ 신규/변경 발생 시에만 발송됩니다.",
           ]
           body = "\n".join(lines)
 
           parts = []
-          if new_items: parts.append(f"?좉퇋 {len(new_items)}嫄?)
-          if changed_items: parts.append(f"蹂寃?{len(changed_items)}嫄?)
-          subject = f"[?몄쥌援?븙] {' + '.join(parts)} ??{today}"
+          if new_items: parts.append(f"신규 {len(new_items)}건")
+          if changed_items: parts.append(f"변경 {len(changed_items)}건")
+          subject = f"[세종국악] {' + '.join(parts)} — {today}"
 
           msg = MIMEMultipart("alternative")
           msg["Subject"] = subject
-          msg["From"] = f"?몄쥌援?븙 怨듦퀬?뚮┝ <{SENDER}>"
+          msg["From"] = f"세종국악 공고알림 <{SENDER}>"
           msg["To"] = RECIPIENT
           if CC:
               msg["Cc"] = CC
@@ -211,17 +212,17 @@ jobs:
               server.starttls()
               server.login(SENDER, APP_PW)
               server.send_message(msg, to_addrs=recipients)
-          print(f"[?깃났] ?좉퇋쨌蹂寃??뚮┝ 諛쒖넚 ??{recipients}")
-          print(f"?쒕ぉ: {subject}")
+          print(f"[성공] 신규·변경 알림 발송 → {recipients}")
+          print(f"제목: {subject}")
 
-          # ??? ?붾젅洹몃옩 諛깆뾽 諛쒖넚 ???
+          # ─── 텔레그램 백업 발송 ───
           tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
           tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "")
           if tg_token and tg_chat:
               import urllib.request, urllib.parse
               tg_msg = body[:3900]
               if len(body) > 3900:
-                  tg_msg += "\n\n???앸왂, 硫붿씪?먯꽌 ?꾩껜 ?뺤씤)"
+                  tg_msg += "\n\n…(생략, 메일에서 전체 확인)"
               try:
                   req = urllib.request.Request(
                       f"https://api.telegram.org/bot{tg_token}/sendMessage",
@@ -233,9 +234,9 @@ jobs:
                       method="POST",
                   )
                   with urllib.request.urlopen(req, timeout=10) as resp:
-                      print(f"[?깃났] ?붾젅洹몃옩 諛쒖넚 ?꾨즺 ({resp.status})")
+                      print(f"[성공] 텔레그램 발송 완료 ({resp.status})")
               except Exception as e:
-                  print(f"[寃쎄퀬] ?붾젅洹몃옩 諛쒖넚 ?ㅽ뙣 (硫붿씪? ?깃났): {e}")
+                  print(f"[경고] 텔레그램 발송 실패 (메일은 성공): {e}")
           else:
-              print("[?뺣낫] ?붾젅洹몃옩 ?쒗겕由?誘몄꽕????諛깆뾽 梨꾨꼸 ?ㅽ궢")
+              print("[정보] 텔레그램 시크릿 미설정 — 백업 채널 스킵")
           PYEOF
