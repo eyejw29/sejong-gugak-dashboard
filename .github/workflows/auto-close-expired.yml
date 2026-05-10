@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   auto-close:
@@ -15,9 +16,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Auto-close expired announcements
+        id: autoclose
         run: |
           python3 << 'PYTHON_SCRIPT'
-          import json
+          import json, os
           from datetime import datetime
 
           today = datetime.now().strftime("%Y-%m-%d")
@@ -36,7 +38,11 @@ jobs:
               try:
                   if deadline < today:
                       item["closed"] = True
-                      changed.append(f"  id={item['id']}: {item['title']} (마감: {deadline})")
+                      changed.append({
+                          "id": item.get("id"),
+                          "title": item.get("title", ""),
+                          "deadline": deadline,
+                      })
               except (ValueError, TypeError):
                   pass
 
@@ -45,9 +51,17 @@ jobs:
                   json.dump(data, f, ensure_ascii=False, indent=2)
               print(f"[OK] {len(changed)}건 closed 처리:")
               for c in changed:
-                  print(c)
+                  print(f"  id={c['id']}: {c['title']} (마감: {c['deadline']})")
           else:
               print("[OK] 변경 없음 — 마감된 공고 없음")
+
+          # GitHub Actions output (이후 step에서 활용)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"changed_count={len(changed)}\n")
+
+          # 상세 리스트는 파일로 (변경 알림용)
+          with open("autoclose_result.json", "w", encoding="utf-8") as f:
+              json.dump({"date": today, "items": changed}, f, ensure_ascii=False, indent=2)
           PYTHON_SCRIPT
 
       - name: Commit announcement changes
@@ -78,3 +92,10 @@ jobs:
             git commit -m "자동: 대시보드 리빌드 ($(date +%Y-%m-%d))"
             git push
           fi
+
+      - name: Trigger change-alert (마감 처리된 항목 알림)
+        if: steps.commit-data.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run change-alert.yml -f reason=auto-close

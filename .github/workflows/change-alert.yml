@@ -1,0 +1,221 @@
+name: 신규·변경 공고 알림
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '발송 사유 (cowork-collect / monthly-review / manual 등)'
+        required: false
+        default: 'manual'
+
+jobs:
+  diff-and-send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 레포 체크아웃 (직전 커밋까지 비교 가능하게)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: announcements.json diff 추출
+        id: diff
+        run: |
+          python3 << 'PYEOF'
+          import json, subprocess, os
+
+          # HEAD~1 의 announcements.json 추출
+          try:
+              prev_raw = subprocess.check_output(
+                  ["git", "show", "HEAD~1:data/announcements.json"],
+                  stderr=subprocess.DEVNULL,
+              )
+              prev = json.loads(prev_raw)
+          except Exception:
+              prev = []
+
+          with open("data/announcements.json", "r", encoding="utf-8") as f:
+              cur = json.load(f)
+
+          prev_by_id = {x.get("id"): x for x in prev}
+          cur_by_id  = {x.get("id"): x for x in cur}
+
+          # 신규 = 새 ID
+          new_items = [v for k, v in cur_by_id.items() if k not in prev_by_id]
+
+          # 변경 = 기존 ID인데 내용 바뀐 것
+          TRACK_FIELDS = [
+              "title", "deadline", "deadlineDate", "closed",
+              "budget", "relevance", "applyUrl", "note", "verified",
+              "decision", "result",
+          ]
+          changed_items = []
+          for k, cur_item in cur_by_id.items():
+              if k not in prev_by_id:
+                  continue
+              prev_item = prev_by_id[k]
+              diffs = []
+              for field in TRACK_FIELDS:
+                  if cur_item.get(field) != prev_item.get(field):
+                      diffs.append({
+                          "field": field,
+                          "before": prev_item.get(field),
+                          "after": cur_item.get(field),
+                      })
+              if diffs:
+                  cur_item = dict(cur_item)
+                  cur_item["_diffs"] = diffs
+                  changed_items.append(cur_item)
+
+          out = {"new": new_items, "changed": changed_items}
+          with open("diff_result.json", "w", encoding="utf-8") as f:
+              json.dump(out, f, ensure_ascii=False)
+
+          print(f"신규: {len(new_items)}건 / 변경: {len(changed_items)}건")
+          # GitHub Actions output
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"new_count={len(new_items)}\n")
+              f.write(f"changed_count={len(changed_items)}\n")
+          PYEOF
+
+      - name: 신규·변경 없으면 종료
+        if: steps.diff.outputs.new_count == '0' && steps.diff.outputs.changed_count == '0'
+        run: |
+          echo "[스킵] 신규·변경 0건 — 발송 안 함"
+          exit 0
+
+      - name: 메일 발송
+        if: steps.diff.outputs.new_count != '0' || steps.diff.outputs.changed_count != '0'
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_SENDER: "eyejw29@gmail.com"
+          GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
+          GMAIL_CC: "eyejw29@gmail.com"
+          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          REASON: ${{ github.event.inputs.reason }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 << 'PYEOF'
+          import json, smtplib, os, sys
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          from datetime import datetime, timezone, timedelta
+
+          KST = timezone(timedelta(hours=9))
+          now = datetime.now(KST)
+          today = now.strftime("%Y-%m-%d")
+          weekday = ["월","화","수","목","금","토","일"][now.weekday()]
+
+          with open("diff_result.json", "r", encoding="utf-8") as f:
+              diff = json.load(f)
+          new_items = diff["new"]
+          changed_items = diff["changed"]
+
+          SENDER = os.environ["GMAIL_SENDER"]
+          RECIPIENT = os.environ["GMAIL_RECIPIENT"]
+          CC = os.environ.get("GMAIL_CC", "")
+          APP_PW = os.environ["GMAIL_APP_PASSWORD"]
+          DASHBOARD = os.environ["DASHBOARD_URL"]
+          REASON = os.environ.get("REASON", "manual")
+
+          def label(field):
+              return {
+                  "title": "제목", "deadline": "마감(표시)", "deadlineDate": "마감일",
+                  "closed": "마감여부", "budget": "예산", "relevance": "관련도",
+                  "applyUrl": "신청URL", "note": "비고", "verified": "검증",
+                  "decision": "의사결정", "result": "결과",
+              }.get(field, field)
+
+          lines = [
+              f"🎵 세종국악 — 신규·변경 공고 알림",
+              f"",
+              f"{today} ({weekday}) · 사유: {REASON}",
+              f"신규 {len(new_items)}건 · 변경 {len(changed_items)}건",
+              f"",
+              f"{'─'*40}",
+          ]
+
+          if new_items:
+              lines.append("")
+              lines.append(f"🆕 신규 공고 ({len(new_items)}건)")
+              for it in new_items:
+                  lines.append("")
+                  lines.append(f"▸ {it.get('title','(제목없음)')}")
+                  lines.append(f"  🏛 {it.get('org','')}  ·  마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'}")
+                  if it.get('budget'):
+                      lines.append(f"  💰 {it['budget']}")
+                  if it.get('relevance') == 'high':
+                      lines.append(f"  ⭐ 핵심 매칭 후보")
+                  if it.get('applyUrl'):
+                      lines.append(f"  📎 {it['applyUrl']}")
+                  tag = "✅ 검증완료" if it.get('verified') else "⚠️ 미검증"
+                  lines.append(f"  {tag}")
+                  if it.get('note'):
+                      lines.append(f"  💬 {it['note']}")
+
+          if changed_items:
+              lines.append("")
+              lines.append(f"✏️ 변경된 공고 ({len(changed_items)}건)")
+              for it in changed_items:
+                  lines.append("")
+                  lines.append(f"▸ {it.get('title','(제목없음)')} (id={it.get('id')})")
+                  for d in it.get("_diffs", []):
+                      lines.append(f"  · {label(d['field'])}: {d['before']!r} → {d['after']!r}")
+                  if it.get('applyUrl'):
+                      lines.append(f"  📎 {it['applyUrl']}")
+
+          lines += [
+              f"",
+              f"{'─'*40}",
+              f"",
+              f"대시보드: {DASHBOARD}",
+              f"※ 신규/변경 발생 시에만 발송됩니다.",
+          ]
+          body = "\n".join(lines)
+
+          parts = []
+          if new_items: parts.append(f"신규 {len(new_items)}건")
+          if changed_items: parts.append(f"변경 {len(changed_items)}건")
+          subject = f"[세종국악] {' + '.join(parts)} — {today}"
+
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = subject
+          msg["From"] = f"세종국악 공고알림 <{SENDER}>"
+          msg["To"] = RECIPIENT
+          if CC:
+              msg["Cc"] = CC
+          msg.attach(MIMEText(body, "plain", "utf-8"))
+
+          recipients = [RECIPIENT] + ([CC] if CC else [])
+          with smtplib.SMTP("smtp.gmail.com", 587) as server:
+              server.starttls()
+              server.login(SENDER, APP_PW)
+              server.send_message(msg, to_addrs=recipients)
+          print(f"[성공] 신규·변경 알림 발송 → {recipients}")
+          print(f"제목: {subject}")
+
+          # ─── 텔레그램 백업 발송 ───
+          tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "")
+          if tg_token and tg_chat:
+              import urllib.request, urllib.parse
+              tg_msg = body[:3900]
+              if len(body) > 3900:
+                  tg_msg += "\n\n…(생략, 메일에서 전체 확인)"
+              try:
+                  req = urllib.request.Request(
+                      f"https://api.telegram.org/bot{tg_token}/sendMessage",
+                      data=urllib.parse.urlencode({
+                          "chat_id": tg_chat,
+                          "text": tg_msg,
+                          "disable_web_page_preview": "true",
+                      }).encode("utf-8"),
+                      method="POST",
+                  )
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      print(f"[성공] 텔레그램 발송 완료 ({resp.status})")
+              except Exception as e:
+                  print(f"[경고] 텔레그램 발송 실패 (메일은 성공): {e}")
+          else:
+              print("[정보] 텔레그램 시크릿 미설정 — 백업 채널 스킵")
+          PYEOF

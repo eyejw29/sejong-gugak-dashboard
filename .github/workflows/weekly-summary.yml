@@ -1,0 +1,149 @@
+name: 주간 공고 요약 (월요일)
+
+on:
+  schedule:
+    # 매주 월요일 09:00 KST (UTC 일요일 00:00)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 데이터 가져오기
+        run: |
+          DATA_URL="https://raw.githubusercontent.com/eyejw29/sejong-gugak-dashboard/main/data/announcements.json"
+          curl -sf "$DATA_URL" -o announcements.json || echo "[]" > announcements.json
+
+      - name: 주간 요약 메일 발송
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GMAIL_SENDER: "eyejw29@gmail.com"
+          GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
+          GMAIL_CC: "eyejw29@gmail.com"
+          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 << 'PYEOF'
+          import json, smtplib, os, sys
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          from datetime import datetime, timezone, timedelta
+
+          KST = timezone(timedelta(hours=9))
+          now = datetime.now(KST)
+          today = now.strftime("%Y-%m-%d")
+          today_dt = datetime.strptime(today, "%Y-%m-%d")
+
+          with open("announcements.json", "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          # 진행중만 + D-day 계산
+          active = []
+          for it in data:
+              if it.get("closed", False):
+                  continue
+              dl = it.get("deadlineDate")
+              if dl:
+                  try:
+                      it["_dday"] = (datetime.strptime(dl, "%Y-%m-%d") - today_dt).days
+                  except Exception:
+                      it["_dday"] = None
+              else:
+                  it["_dday"] = None
+              if it["_dday"] is None or it["_dday"] >= 0:
+                  active.append(it)
+
+          # 정렬: dday 오름차순, null은 끝으로
+          active.sort(key=lambda x: (x["_dday"] is None, x["_dday"] if x["_dday"] is not None else 999))
+
+          # 다음 7일 캘린더
+          next7 = [it for it in active if it["_dday"] is not None and 0 <= it["_dday"] <= 7]
+          # null 마감일
+          nulls = [it for it in active if it["_dday"] is None]
+
+          SENDER = os.environ["GMAIL_SENDER"]
+          RECIPIENT = os.environ["GMAIL_RECIPIENT"]
+          CC = os.environ.get("GMAIL_CC", "")
+          APP_PW = os.environ["GMAIL_APP_PASSWORD"]
+          DASHBOARD = os.environ["DASHBOARD_URL"]
+
+          lines = [
+              f"🎵 세종국악 — 주간 공고 요약",
+              f"",
+              f"{today} (월) 기준",
+              f"진행중 {len(active)}건  ·  다음 7일 마감 {len(next7)}건  ·  마감일 미확정 {len(nulls)}건",
+              f"",
+              f"{'─'*40}",
+          ]
+
+          if next7:
+              lines.append("")
+              lines.append(f"📅 다음 7일 마감 캘린더")
+              for it in next7:
+                  star = "⭐ " if it.get("relevance") == "high" else ""
+                  lines.append(f"  D-{it['_dday']}  {it.get('deadlineDate')}  {star}{it.get('title','')}")
+
+          lines.append("")
+          lines.append(f"📋 진행중 전체 ({len(active)}건)")
+          for it in active:
+              dday = f"D-{it['_dday']}" if it["_dday"] is not None else "마감미정"
+              star = "⭐ " if it.get("relevance") == "high" else ""
+              lines.append(f"  {star}• [{dday}] {it.get('title','')} — {it.get('org','')} (마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'})")
+
+          if nulls:
+              lines.append("")
+              lines.append(f"⚠️ 마감일 미확정 — 1차 출처 확인 필요 ({len(nulls)}건)")
+              for it in nulls:
+                  lines.append(f"  • {it.get('title','')}  ·  {it.get('deadline','확인필요')}")
+
+          lines += [
+              f"",
+              f"{'─'*40}",
+              f"",
+              f"대시보드: {DASHBOARD}",
+              f"※ 매주 월요일 09:00 자동 발송됩니다.",
+          ]
+          body = "\n".join(lines)
+          subject = f"[세종국악] 주간 요약 — {today} (진행 {len(active)}건, 7일내 마감 {len(next7)}건)"
+
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = subject
+          msg["From"] = f"세종국악 공고알림 <{SENDER}>"
+          msg["To"] = RECIPIENT
+          if CC:
+              msg["Cc"] = CC
+          msg.attach(MIMEText(body, "plain", "utf-8"))
+          recipients = [RECIPIENT] + ([CC] if CC else [])
+          with smtplib.SMTP("smtp.gmail.com", 587) as server:
+              server.starttls()
+              server.login(SENDER, APP_PW)
+              server.send_message(msg, to_addrs=recipients)
+          print(f"[성공] 주간 요약 발송 → {recipients}")
+
+          # ─── 텔레그램 백업 발송 ───
+          tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+          tg_chat = os.environ.get("TELEGRAM_CHAT_ID", "")
+          if tg_token and tg_chat:
+              import urllib.request, urllib.parse
+              tg_msg = body[:3900]
+              if len(body) > 3900:
+                  tg_msg += "\n\n…(생략, 메일에서 전체 확인)"
+              try:
+                  req = urllib.request.Request(
+                      f"https://api.telegram.org/bot{tg_token}/sendMessage",
+                      data=urllib.parse.urlencode({
+                          "chat_id": tg_chat,
+                          "text": tg_msg,
+                          "disable_web_page_preview": "true",
+                      }).encode("utf-8"),
+                      method="POST",
+                  )
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      print(f"[성공] 텔레그램 발송 완료 ({resp.status})")
+              except Exception as e:
+                  print(f"[경고] 텔레그램 발송 실패 (메일은 성공): {e}")
+          else:
+              print("[정보] 텔레그램 시크릿 미설정 — 백업 채널 스킵")
+          PYEOF
