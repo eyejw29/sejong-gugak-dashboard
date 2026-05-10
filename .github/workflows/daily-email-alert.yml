@@ -22,7 +22,7 @@ jobs:
           GMAIL_SENDER: "eyejw29@gmail.com"
           GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
           GMAIL_CC: "eyejw29@gmail.com"
-          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          DASHBOARD_URL: "https://admin.sejonggugak.com/#/notices-monitor"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
@@ -93,21 +93,12 @@ jobs:
               lines.append("")
               lines.append(f"▸ {item['title']}")
               lines.append(f"  {fmt_dday(item['_dday'])}  ·  마감: {item.get('deadlineDate','미정')}")
-              lines.append(f"  🏛 {item.get('org','')}")
-              if item.get('budget'):
-                  lines.append(f"  💰 {item['budget']}")
+              org_line = f"  🏛 {item.get('org','')}"
               if item.get('relevance') == 'high':
-                  lines.append(f"  ⭐ 핵심 매칭 후보")
-              if item.get('decision'):
-                  lines.append(f"  📌 의사결정: {item['decision']}")
-              else:
-                  lines.append(f"  📌 의사결정 미정 — 응모/스킵 결정 필요")
+                  org_line += "  ·  ⭐ 핵심 매칭"
+              lines.append(org_line)
               if item.get('applyUrl'):
                   lines.append(f"  📎 {item['applyUrl']}")
-              tag = "✅ 검증완료" if item.get('verified') else "⚠️ 미검증 (1차 출처 확인 권장)"
-              lines.append(f"  {tag}")
-              if item.get('note'):
-                  lines.append(f"  💬 {item['note']}")
 
           lines += [
               f"",
