@@ -567,12 +567,12 @@
     "org": "전통공연예술진흥재단",
     "type": "인력양성/실연단체",
     "target": "개인 (만 19~39세 미만, 전통예술 전공 졸업자)",
-    "deadline": "2026-07-10 ~ 2026-07-24 (이메일 접수)",
+    "deadline": "2026-07-10 ~ 2026-07-24",
     "deadlineDate": "2026-07-24",
     "openDate": "2026-07-10",
     "relevance": "low",
     "verified": false,
-    "verifySource": "다수 언론보도 (메디팜헬스뉴스, 우리문화신문, 개미신문 등, 2026-04). 2026-05-01 월간리뷰: 추가 웹검색으로 접수기간 7/10~7/24 확인. 원문 확인 후 verified 승격 필요",
+    "verifySource": "검색 다수 보도 (kotpa.org 1차 출처 확인 권장)",
     "verifyUrl": "https://www.kotpa.org/ucms/bbs/B0000021/list.do?menuNo=300008",
     "applyUrl": "https://www.kotpa.org",
     "qualification": "만 19세~39세 미만, 해당 분야 대학교(2년제 포함) 졸업생/졸업예정자 또는 국가·시도무형유산 종목 이수자 (재학생 불가)",
@@ -586,8 +586,8 @@
       "개인"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "skip",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -661,12 +661,12 @@
     "org": "국악방송",
     "type": "공연",
     "target": "단체 (국악 공연단체)",
-    "deadline": "미공고 (2026년 6~7월 접수 예상)",
-    "deadlineDate": null,
+    "deadline": "2026-06-16 ~ 2026-07-06 (예상, 1차 출처 미확인)",
+    "deadlineDate": "2026-07-06",
     "openDate": null,
     "relevance": "high",
     "verified": false,
-    "verifySource": "2025년 2차 일정 참고 (6~7월 접수). 2026년 미공고",
+    "verifySource": "kukak21.com 등 다수 보도 (igbf.kr 1차 출처 확인 권장)",
     "verifyUrl": "https://www.gugakfm.co.kr",
     "applyUrl": "https://www.gugakfm.co.kr",
     "qualification": "국악 공연단체",
@@ -680,8 +680,8 @@
       "단체"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "apply",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -775,8 +775,8 @@
       "단체"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -807,8 +807,8 @@
       "단체"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -840,8 +840,8 @@
       "개인"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "apply",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -872,8 +872,8 @@
       "개인"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "skip",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -904,8 +904,8 @@
       "개인"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "skip",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -969,8 +969,8 @@
       "단체"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -1001,8 +1001,8 @@
       "단체"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -1066,8 +1066,8 @@
       "전주"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -1099,8 +1099,8 @@
       "공연발표"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "apply",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -1132,8 +1132,8 @@
       "추가공모"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "apply",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
@@ -1165,8 +1165,8 @@
       "추가공모"
     ],
     "closed": false,
-    "decision": null,
-    "decisionAt": null,
+    "decision": "pending",
+    "decisionAt": "2026-05-10",
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null
