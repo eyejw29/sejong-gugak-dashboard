@@ -122,13 +122,23 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 .btn-secondary:hover{background:var(--bg);}
 
 /* 접이식: 상세 + 이력 (클릭 시) */
-.card-expand{display:none;border-top:1px solid var(--border-light);padding:16px 20px;background:var(--bg);}
+.card-expand{display:block;border-top:1px solid var(--border-light);padding:16px 20px;background:var(--bg);}
 .card-expand.open{display:block;}
 .expand-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;}
 .exp-label{font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:.3px;}
 .exp-val{font-size:12px;color:var(--text);font-weight:500;margin-top:1px;}
-.expand-toggle{display:flex;align-items:center;justify-content:center;padding:6px;font-size:11px;color:var(--text-3);cursor:pointer;background:none;border:none;border-top:1px solid var(--border-light);width:100%;font-family:inherit;transition:.15s;}
-.expand-toggle:hover{background:var(--bg);color:var(--blue);}
+/* 2026-05-10: 공고일/마감일 강조 (오은재 담당자 명령) */
+.exp-val.deadline-highlight{font-size:14px;color:var(--text);font-weight:600;letter-spacing:.02em;}
+.exp-val.deadline-highlight strong{color:var(--red,#B8342A);font-size:15px;}
+.expand-toggle{display:none !important;} /* 2026-05-10: 토글 버튼 제거, 항상 펼침 */
+
+/* 2026-05-10: 월별·기간 필터 toolbar */
+.period-toolbar{margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--white);border-bottom:1px solid var(--border-light);}
+.period-toolbar .period-label{font-size:12px;font-weight:600;color:var(--text-2);margin-right:4px;}
+.period-toolbar .period-sep{font-size:11px;color:var(--text-3);}
+.period-toolbar .date-input{padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-family:inherit;color:var(--text);background:var(--white);outline:none;}
+.period-toolbar .date-input:focus{border-color:var(--blue);}
+@media (max-width:768px){.period-toolbar{padding:8px 16px;}}
 
 /* history */
 .history-section{margin-top:12px;padding-top:12px;border-top:1px solid var(--border-light);}
@@ -217,7 +227,7 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 <!-- TABS -->
 <div class="tabs">
   <div class="tab active" onclick="switchTab('list')">📋 공고 리스트</div>
-  <div class="tab" onclick="switchTab('calendar')">📅 캘린더</div>
+  <div class="tab" onclick="switchTab('calendar')">📅 연간 일정표</div>
   <div class="tab" onclick="switchTab('closed')">📁 종료/참고</div>
 </div>
 
@@ -236,6 +246,18 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
       <option value="relevance">관련도순</option>
     </select>
   </div>
+  <!-- 2026-05-10: 월별·기간 필터 (오은재 담당자 명령) -->
+  <div class="toolbar period-toolbar">
+    <span class="period-label">📅 마감 기준</span>
+    <select class="sort-sel" id="month-sel" onchange="onMonthChange()">
+      <option value="all">전체 기간</option>
+    </select>
+    <span class="period-sep">또는</span>
+    <input type="date" class="date-input" id="date-from" onchange="onDateRangeChange()">
+    <span class="period-sep">~</span>
+    <input type="date" class="date-input" id="date-to" onchange="onDateRangeChange()">
+    <button class="toggle-btn" onclick="resetPeriodFilter()">초기화</button>
+  </div>
   <div class="list" id="main-list"></div>
 </div>
 
@@ -253,6 +275,18 @@ body{font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;back
 
 <div class="tab-content" id="tab-closed">
   <div class="section-label">📁 마감된 공고 (차기 대비용)</div>
+  <!-- 2026-05-10: 종료/참고 기간 조회 (오은재 담당자 명령) -->
+  <div class="toolbar period-toolbar">
+    <span class="period-label">📅 마감 기준</span>
+    <select class="sort-sel" id="closed-month-sel" onchange="onClosedMonthChange()">
+      <option value="all">전체 기간</option>
+    </select>
+    <span class="period-sep">또는</span>
+    <input type="date" class="date-input" id="closed-date-from" onchange="onClosedDateRangeChange()">
+    <span class="period-sep">~</span>
+    <input type="date" class="date-input" id="closed-date-to" onchange="onClosedDateRangeChange()">
+    <button class="toggle-btn" onclick="resetClosedPeriodFilter()">초기화</button>
+  </div>
   <div class="list" id="closed-list"></div>
   <div class="section-label" style="margin-top:32px;">📡 모니터링 소스</div>
   <div id="source-list"></div>
@@ -1634,10 +1668,14 @@ announcements.forEach(a => {
 
 let searchQuery = '';
 let filters = { danche:false, gaein:false, verified:false };
-let expandedIds = new Set(); // 상세 펼침 상태
+let expandedIds = new Set(); // 상세 펼침 상태 (2026-05-10: 항상 펼침으로 deprecated)
 let openHistoryId = null;
 let memos = {};
 let calMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+
+// 2026-05-10: 월별·기간 필터 (공고 리스트 + 종료/참고)
+let periodFilter = { month: 'all', from: null, to: null };
+let closedPeriodFilter = { month: 'all', from: null, to: null };
 
 document.getElementById('header-date').textContent = `${TODAY.getFullYear()}년 ${TODAY.getMonth()+1}월 ${TODAY.getDate()}일`;
 document.getElementById('update-info').textContent = '업데이트 ' + TODAY.toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -1682,6 +1720,32 @@ function applyFilters(list){
   if(filters.verified) r=r.filter(a=>a.verified);
   return r;
 }
+
+// 2026-05-10: 기간 필터 (deadlineDate 기준)
+function applyPeriodFilter(list, pf){
+  if(!pf || (pf.month==='all' && !pf.from && !pf.to)) return list;
+  return list.filter(a=>{
+    if(!a.deadlineDate) return false;
+    const dl=a.deadlineDate;
+    if(pf.month && pf.month!=='all'){
+      if(!dl.startsWith(pf.month)) return false;
+    }
+    if(pf.from && dl<pf.from) return false;
+    if(pf.to && dl>pf.to) return false;
+    return true;
+  });
+}
+// 월 옵션 동적 생성: announcements의 deadlineDate에서 unique YYYY-MM 추출
+function buildMonthOptions(list, selectId, currentValue){
+  const months=[...new Set(list.filter(a=>a.deadlineDate).map(a=>a.deadlineDate.substring(0,7)))].sort();
+  const sel=document.getElementById(selectId);
+  if(!sel) return;
+  const cur=currentValue||sel.value||'all';
+  sel.innerHTML='<option value="all">전체 기간</option>'+months.map(m=>{
+    const [y,mm]=m.split('-');
+    return `<option value="${m}"${m===cur?' selected':''}>${y}년 ${parseInt(mm,10)}월</option>`;
+  }).join('');
+}
 function sortList(arr){
   const mode=document.getElementById('sort-sel').value;
   return [...arr].sort((a,b)=>{
@@ -1713,7 +1777,7 @@ function showToast(msg){ const t=document.getElementById('toast');t.textContent=
 function renderCard(a, showMemo){
   const dd=ddayInfo(a.deadlineDate);
   const memo=memos[a.id]||'';
-  const isExpanded=expandedIds.has(a.id);
+  const isExpanded=true; // 2026-05-10: 항상 펼침 (오은재 담당자 명령, 룰 6 가벼운 변경)
   const rel=a.relevance==='high'?'rel-high':a.relevance==='mid'?'rel-mid':'rel-low';
   const fitCls=a.qualifyFit==='yes'?'fit-yes':a.qualifyFit==='maybe'?'fit-maybe':'fit-no';
   const fitTxt=a.qualifyFit==='yes'?'✅ 지원 가능':a.qualifyFit==='maybe'?'⚠️ 조건부':'❌ 해당없음';
@@ -1775,7 +1839,7 @@ function renderCard(a, showMemo){
   h+=`<div class="card-expand ${isExpanded?'open':''}" id="expand-${a.id}">`;
   h+=`<div class="expand-grid">`;
   h+=`<div><div class="exp-label">출처</div><div class="exp-val">${a.verifySource||'—'}</div></div>`;
-  h+=`<div><div class="exp-label">공고일 / 마감일</div><div class="exp-val">${a.openDate||'—'} ~ ${a.deadline||a.deadlineDate||'—'}</div></div>`;
+  h+=`<div><div class="exp-label">📅 공고일 / 마감일</div><div class="exp-val deadline-highlight">${a.openDate||'—'}  ~  <strong>${a.deadline||a.deadlineDate||'—'}</strong></div></div>`;
   if(a.budgetNote){h+=`<div><div class="exp-label">예산 참고</div><div class="exp-val">${a.budgetNote}</div></div>`;}
   h+=`</div>`;
 
@@ -1797,8 +1861,7 @@ function renderCard(a, showMemo){
   }
   h+=`</div>`;
 
-  // 토글 버튼
-  h+=`<button class="expand-toggle" onclick="toggleExpand(${a.id})">${isExpanded?'▲ 접기':'▼ 상세 정보 더보기'}</button>`;
+  // 2026-05-10: 토글 버튼 제거 (항상 펼침, 오은재 담당자 명령)
 
   h+=`</div>`;
   return h;
@@ -1807,7 +1870,8 @@ function renderCard(a, showMemo){
 // ===== RENDER =====
 function renderList(){
   const active=getActive();
-  let filtered=sortList(applyFilters(active));
+  buildMonthOptions(active,'month-sel',periodFilter.month);
+  let filtered=sortList(applyPeriodFilter(applyFilters(active),periodFilter));
   const stats={
     total:active.length,
     urgent:active.filter(a=>{const d=getDday(a.deadlineDate);return d!==null&&d>=0&&d<=7;}).length,
@@ -1818,7 +1882,8 @@ function renderList(){
   document.getElementById('s-memo').textContent=stats.memo;
 
   if(!filtered.length){
-    document.getElementById('main-list').innerHTML=`<div class="empty-msg">${searchQuery?'검색 결과가 없습니다':'접수중인 공고가 없습니다'}</div>`;
+    const msg=searchQuery?'검색 결과가 없습니다':(periodFilter.month!=='all'||periodFilter.from||periodFilter.to)?'선택한 기간에 해당하는 공고가 없습니다':'접수중인 공고가 없습니다';
+    document.getElementById('main-list').innerHTML=`<div class="empty-msg">${msg}</div>`;
     return;
   }
   document.getElementById('main-list').innerHTML=filtered.map(a=>renderCard(a,true)).join('');
@@ -1826,12 +1891,52 @@ function renderList(){
 
 function renderClosed(){
   const closed=getClosed();
-  document.getElementById('closed-list').innerHTML=closed.length?closed.map(a=>renderCard(a,false)).join(''):'<div class="empty-msg">마감된 공고가 없습니다</div>';
+  buildMonthOptions(closed,'closed-month-sel',closedPeriodFilter.month);
+  const filtered=applyPeriodFilter(closed,closedPeriodFilter);
+  document.getElementById('closed-list').innerHTML=filtered.length?filtered.map(a=>renderCard(a,false)).join(''):`<div class="empty-msg">${(closedPeriodFilter.month!=='all'||closedPeriodFilter.from||closedPeriodFilter.to)?'선택한 기간에 해당하는 공고가 없습니다':'마감된 공고가 없습니다'}</div>`;
   document.getElementById('source-list').innerHTML=sources.map(s=>`
     <div class="source-item" onclick="window.open('https://${s.url}','_blank')">
       <div><div class="src-name">${s.name}</div><div class="src-note">${s.note}</div><div class="src-url">${s.url} →</div></div>
       <div class="src-type">${s.type}</div>
     </div>`).join('');
+}
+
+// 2026-05-10: 기간 필터 핸들러
+function onMonthChange(){
+  periodFilter.month=document.getElementById('month-sel').value;
+  if(periodFilter.month!=='all'){periodFilter.from=null;periodFilter.to=null;document.getElementById('date-from').value='';document.getElementById('date-to').value='';}
+  renderList();
+}
+function onDateRangeChange(){
+  periodFilter.from=document.getElementById('date-from').value||null;
+  periodFilter.to=document.getElementById('date-to').value||null;
+  if(periodFilter.from||periodFilter.to){periodFilter.month='all';document.getElementById('month-sel').value='all';}
+  renderList();
+}
+function resetPeriodFilter(){
+  periodFilter={month:'all',from:null,to:null};
+  document.getElementById('month-sel').value='all';
+  document.getElementById('date-from').value='';
+  document.getElementById('date-to').value='';
+  renderList();
+}
+function onClosedMonthChange(){
+  closedPeriodFilter.month=document.getElementById('closed-month-sel').value;
+  if(closedPeriodFilter.month!=='all'){closedPeriodFilter.from=null;closedPeriodFilter.to=null;document.getElementById('closed-date-from').value='';document.getElementById('closed-date-to').value='';}
+  renderClosed();
+}
+function onClosedDateRangeChange(){
+  closedPeriodFilter.from=document.getElementById('closed-date-from').value||null;
+  closedPeriodFilter.to=document.getElementById('closed-date-to').value||null;
+  if(closedPeriodFilter.from||closedPeriodFilter.to){closedPeriodFilter.month='all';document.getElementById('closed-month-sel').value='all';}
+  renderClosed();
+}
+function resetClosedPeriodFilter(){
+  closedPeriodFilter={month:'all',from:null,to:null};
+  document.getElementById('closed-month-sel').value='all';
+  document.getElementById('closed-date-from').value='';
+  document.getElementById('closed-date-to').value='';
+  renderClosed();
 }
 
 // ===== CALENDAR =====
