@@ -21,7 +21,7 @@ jobs:
           GMAIL_SENDER: "eyejw29@gmail.com"
           GMAIL_RECIPIENT: "sejong-8784@hanmail.net"
           GMAIL_CC: "eyejw29@gmail.com"
-          DASHBOARD_URL: "https://eyejw29.github.io/sejong-gugak-dashboard/"
+          DASHBOARD_URL: "https://admin.sejonggugak.com/#/notices-monitor"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
@@ -90,7 +90,7 @@ jobs:
           for it in active:
               dday = f"D-{it['_dday']}" if it["_dday"] is not None else "마감미정"
               star = "⭐ " if it.get("relevance") == "high" else ""
-              lines.append(f"  {star}• [{dday}] {it.get('title','')} — {it.get('org','')} (마감: {it.get('deadline') or it.get('deadlineDate') or '확인필요'})")
+              lines.append(f"  {star}• [{dday}] {it.get('title','')} — {it.get('org','')} (마감: {it.get('deadlineDate') or it.get('deadline') or '확인필요'})")
 
           if nulls:
               lines.append("")
