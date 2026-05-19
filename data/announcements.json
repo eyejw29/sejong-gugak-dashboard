@@ -1131,7 +1131,7 @@
       "레퍼토리",
       "추가공모"
     ],
-    "closed": false,
+    "closed": true,
     "decision": "apply",
     "decisionAt": "2026-05-10",
     "result": null,
