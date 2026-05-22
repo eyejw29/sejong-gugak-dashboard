@@ -1065,7 +1065,7 @@
       "단체",
       "전주"
     ],
-    "closed": false,
+    "closed": true,
     "decision": "pending",
     "decisionAt": "2026-05-10",
     "result": null,
