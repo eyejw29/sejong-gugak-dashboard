@@ -1433,7 +1433,7 @@
       "통합공모",
       "공연예술"
     ],
-    "closed": false,
+    "closed": true,
     "decision": "pending",
     "decisionAt": "2026-06-06",
     "result": null,
