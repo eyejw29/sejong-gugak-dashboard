@@ -679,7 +679,7 @@
       "공연",
       "단체"
     ],
-    "closed": false,
+    "closed": true,
     "decision": "apply",
     "decisionAt": "2026-05-10",
     "result": null,
