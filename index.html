@@ -2876,7 +2876,31 @@ let periodFilter = { month: 'all', from: null, to: null };
 let closedPeriodFilter = { month: 'all', from: null, to: null };
 
 document.getElementById('header-date').textContent = `${TODAY.getFullYear()}년 ${TODAY.getMonth()+1}월 ${TODAY.getDate()}일`;
-document.getElementById('update-info').textContent = '업데이트 ' + TODAY.toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+// 데이터 신선도: 페이지 연 시각이 아니라 announcements.json의 실제 마지막 커밋 시각을 표시.
+// 3일 이상 미갱신이면 경고 배너 — 동기화 중단을 화면에서 바로 인지하기 위함 (2026-08-12, 룰 6 가벼운 변경·오은재 담당자 요청)
+(async function(){
+  try{
+    const r = await fetch('https://api.github.com/repos/eyejw29/sejong-gugak-dashboard/commits?path=data/announcements.json&per_page=1');
+    if(!r.ok) return;
+    const j = await r.json();
+    const iso = j[0] && j[0].commit && j[0].commit.committer && j[0].commit.committer.date;
+    if(!iso) return;
+    const d = new Date(iso);
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    const label = d.toLocaleString('ko-KR', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const el = document.getElementById('update-info');
+    el.textContent = '데이터 갱신 ' + label + (days <= 0 ? ' (오늘)' : ' (' + days + '일 전)');
+    if(days >= 3){
+      el.style.color = 'var(--red)';
+      el.style.fontWeight = '700';
+      const warn = document.createElement('div');
+      warn.style.cssText = 'background:var(--red);color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:600;';
+      warn.textContent = '⚠️ 공고 데이터가 ' + days + '일째 갱신되지 않았습니다 — Cowork 수집→자동 push 경로 점검이 필요합니다';
+      const header = document.querySelector('.header');
+      header.parentNode.insertBefore(warn, header.nextSibling);
+    }
+  }catch(e){ /* API 실패 시 표시 생략 (허위 최신 표시보다 낫다) */ }
+})();
 
 // ===== FIREBASE =====
 async function loadMemos(){
