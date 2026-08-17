@@ -2163,7 +2163,7 @@
       "전통연희",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2263,7 +2263,7 @@
       "청년",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
