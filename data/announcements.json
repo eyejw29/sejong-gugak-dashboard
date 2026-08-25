@@ -2395,7 +2395,7 @@
       "AI",
       "기업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
