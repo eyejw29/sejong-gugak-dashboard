@@ -1701,7 +1701,7 @@
       "단체",
       "대전"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -1767,7 +1767,7 @@
       "국악관현악",
       "ARKO"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2164,7 +2164,7 @@
       "전통연희",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2264,7 +2264,7 @@
       "청년",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2329,7 +2329,7 @@
       "AI",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2395,7 +2395,7 @@
       "AI",
       "기업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2525,7 +2525,7 @@
       "개인",
       "해외관객"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2623,7 +2623,7 @@
       "오픈이노베이션",
       "창업기업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2689,7 +2689,7 @@
       "인력풀",
       "개인"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2755,7 +2755,7 @@
       "커뮤니티",
       "창작"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2957,7 +2957,7 @@
       "아르코",
       "인건비지원"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
