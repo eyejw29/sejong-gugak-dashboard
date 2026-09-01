@@ -3124,7 +3124,7 @@
       "예술경영지원센터",
       "단원모집"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
