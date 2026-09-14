@@ -2591,7 +2591,7 @@
       "단체",
       "서울"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2656,7 +2656,7 @@
       "단체",
       "기업협력"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2855,7 +2855,7 @@
       "예술경영지원센터",
       "2차공모"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2923,7 +2923,7 @@
       "본거지",
       "창작거점"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3058,7 +3058,7 @@
       "부평",
       "스튜디오"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3091,7 +3091,7 @@
       "2027공모",
       "사전정보"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3192,7 +3192,7 @@
       "관광지",
       "소편성"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3414,7 +3414,7 @@
       "자체공고",
       "추가모집"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "decision": null,
