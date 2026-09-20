@@ -2591,7 +2591,7 @@
       "단체",
       "서울"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2855,7 +2855,7 @@
       "예술경영지원센터",
       "2차공모"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2923,7 +2923,7 @@
       "본거지",
       "창작거점"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3058,7 +3058,7 @@
       "부평",
       "스튜디오"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3091,7 +3091,7 @@
       "2027공모",
       "사전정보"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3192,7 +3192,7 @@
       "관광지",
       "소편성"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3299,7 +3299,7 @@
       "하반기",
       "단체"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3342,7 +3342,7 @@
       "2027년도",
       "원문확인필요"
     ],
-    "closed": true
+    "closed": false
   },
   {
     "decision": null,
@@ -3377,7 +3377,7 @@
       "충남",
       "출연자모집"
     ],
-    "closed": true
+    "closed": false
   },
   {
     "decision": null,
@@ -3414,7 +3414,7 @@
       "자체공고",
       "추가모집"
     ],
-    "closed": true
+    "closed": false
   },
   {
     "decision": null,
@@ -3450,7 +3450,7 @@
       "2027사업",
       "원문미확인"
     ],
-    "closed": true
+    "closed": false
   },
   {
     "decision": null,
@@ -3517,7 +3517,7 @@
       "NCAS",
       "2차공모"
     ],
-    "closed": true,
+    "closed": false,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4162,6 +4162,73 @@
       "KoCACA",
       "문예회관",
       "컨설팅"
+    ],
+    "closed": false,
+    "decision": null,
+    "decisionAt": null,
+    "result": null,
+    "resultAt": null,
+    "confirmedSourceUrl": null
+  },
+  {
+    "id": 180,
+    "title": "국악사전 표제어 발굴 대회 (국립국악원 국악사전 신규 표제어 제보 공모)",
+    "org": "국립국악원",
+    "type": "공모전·이벤트",
+    "target": "일반인 (전국)",
+    "deadline": "2026-09-17 ~ 2026-10-07",
+    "deadlineDate": "2026-10-07",
+    "openDate": "2026-09-17",
+    "relevance": "low",
+    "verified": true,
+    "verifySource": "문화포털 문화지원사업 상세 원문 열람 (rcrtSn=229831). 접수기간 2026-09-17~10-07, 구글폼 접수, 상품 최우수 5만/우수 3만/장려 2만 네이버페이 포인트 + 참가 추첨 30명 커피쿠폰 명시 (2026-09-19 일일수집)",
+    "verifyUrl": "https://culture.go.kr/portal/cltBnf/cltSup/view.do?viewTp=3&rcrtSn=229831&menuNo=200104",
+    "applyUrl": "https://www.gugak.go.kr/site/program/board/basicboard/view?boardtypeid=58&boardid=48986&menuid=001005006001",
+    "qualification": "제한 없음 (일반인 누구나). 구글 폼으로 국악사전 신규 표제어 후보 제보",
+    "qualifyFit": "yes",
+    "budget": "상품 (지원금 아님)",
+    "budgetScale": "2만~5만원 상당 포인트",
+    "budgetNote": "사업비 지원 아님. 개인 참여형 이벤트",
+    "note": "🆕 신규 (2026-09-19 일일수집). 지원금 사업이 아닌 참여 이벤트라 relevance: low. 다만 국립국악원이 편찬 중인 〈국악사전〉 표제어 체계에 단체 레퍼토리·용어를 제안할 수 있는 통로라, 모듈02 ②작품창작 관점에서 단원 개인 참여 수준으로 검토 가능. 마감 2026-10-07 = D-18",
+    "tags": [
+      "국립국악원",
+      "국악사전",
+      "공모전",
+      "이벤트"
+    ],
+    "closed": false,
+    "decision": null,
+    "decisionAt": null,
+    "result": null,
+    "resultAt": null,
+    "confirmedSourceUrl": null
+  },
+  {
+    "id": 181,
+    "title": "2026 대한민국 예술과 기업 동반성장 대상 참여 예술인(단체) 추가 모집 — 대전문화재단 회차",
+    "org": "대전문화재단 (한국문화예술위원회 지역 접수 대행)",
+    "type": "기업후원 매칭",
+    "target": "예술인, 기업·단체",
+    "deadline": "확인필요 (마감일만 확인: 2026-09-28)",
+    "deadlineDate": "2026-09-28",
+    "openDate": null,
+    "relevance": "medium",
+    "verified": false,
+    "verifySource": "문화포털 문화지원사업 캘린더 목록에서 확인 (rcrtSn=229841, 기관 대전문화재단, 사업유형 사업지원, 지원대상 예술인·기업·단체, 마감 2026-09-28). **상세 페이지 미열람** (2026-09-19 일일수집)",
+    "verifyUrl": "https://culture.go.kr/portal/cltBnf/cltSup/view.do?viewTp=3&rcrtSn=229841&menuNo=200104",
+    "applyUrl": "확인필요",
+    "qualification": "확인필요 — 대전 소재/활동 예술인·단체 한정 가능성 높음. 세종 소재 단체 신청 가능 여부 원문 확인 필수",
+    "qualifyFit": "확인필요",
+    "budget": "확인필요",
+    "budgetScale": "확인필요",
+    "budgetNote": "ARKO 본 공고(id 135) 기준 기업 후원금에 공공재정을 매칭하는 구조. 대전 회차는 지역재단 접수 대행",
+    "note": "🆕 신규 (2026-09-19 일일수집). id 135(ARKO 본 공고, 마감 09-30)의 **대전 지역 접수 회차**. 같은 날 충북문화재단 연장공고(2차, rcrtSn=229827, 마감 09-28)도 확인됐으나 충북 지역 한정 가능성이 높아 미등재. 세종 회차는 여전히 미게시 — 세종시문화관광재단(044-850-0531) 문의 시 함께 확인 권장. 마감 2026-09-28 = D-9",
+    "tags": [
+      "대전문화재단",
+      "동반성장대상",
+      "기업후원",
+      "매칭",
+      "ARKO"
     ],
     "closed": false,
     "decision": null,
