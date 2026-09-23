@@ -1566,7 +1566,7 @@
       "재제작",
       "고액지원"
     ],
-    "closed": false,
+    "closed": true,
     "decision": "pending",
     "decisionAt": "2026-08-20",
     "result": null,
@@ -2591,7 +2591,7 @@
       "단체",
       "서울"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2855,7 +2855,7 @@
       "예술경영지원센터",
       "2차공모"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -2923,7 +2923,7 @@
       "본거지",
       "창작거점"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3058,7 +3058,7 @@
       "부평",
       "스튜디오"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3091,7 +3091,7 @@
       "2027공모",
       "사전정보"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3192,7 +3192,7 @@
       "관광지",
       "소편성"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3299,7 +3299,7 @@
       "하반기",
       "단체"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3342,7 +3342,7 @@
       "2027년도",
       "원문확인필요"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "decision": null,
@@ -3377,7 +3377,7 @@
       "충남",
       "출연자모집"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "decision": null,
@@ -3414,7 +3414,7 @@
       "자체공고",
       "추가모집"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "decision": null,
@@ -3450,7 +3450,7 @@
       "2027사업",
       "원문미확인"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "decision": null,
@@ -3486,7 +3486,7 @@
       "공모전",
       "원문미확인"
     ],
-    "closed": false
+    "closed": true
   },
   {
     "id": 160,
@@ -3517,7 +3517,7 @@
       "NCAS",
       "2차공모"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3797,7 +3797,7 @@
       "프린지",
       "공연단체"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3897,7 +3897,7 @@
       "커뮤니티",
       "교육"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4063,7 +4063,7 @@
       "대관",
       "공연장"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4096,7 +4096,7 @@
       "축제",
       "생활문화"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
