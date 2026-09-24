@@ -1701,7 +1701,7 @@
       "단체",
       "대전"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3588,7 +3588,7 @@
       "공연예술",
       "광역문화재단국비사업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4401,7 +4401,7 @@
       "출연",
       "서울"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
