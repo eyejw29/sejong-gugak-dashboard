@@ -2656,7 +2656,7 @@
       "단체",
       "기업협력"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3264,7 +3264,7 @@
       "아쟁",
       "신규사업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3659,7 +3659,7 @@
       "세무",
       "선착순"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3763,7 +3763,7 @@
       "공연",
       "지역"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4163,7 +4163,7 @@
       "문예회관",
       "컨설팅"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4333,7 +4333,7 @@
       "2027",
       "서울"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4367,7 +4367,7 @@
       "2027",
       "경남"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
