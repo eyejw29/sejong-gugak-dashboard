@@ -3624,7 +3624,7 @@
       "선착순",
       "무료"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3930,7 +3930,7 @@
       "자금",
       "예술산업"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4505,7 +4505,7 @@
       "공연장",
       "대구"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
