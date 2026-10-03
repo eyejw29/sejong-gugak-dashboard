@@ -3227,7 +3227,7 @@
       "SCAS",
       "정보용"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3693,7 +3693,7 @@
       "예술산업",
       "5차"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3962,7 +3962,7 @@
       "대중음악",
       "공연환경"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
