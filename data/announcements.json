@@ -4299,7 +4299,7 @@
       "경기",
       "국악관현악"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
