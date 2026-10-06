@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 jobs:
   auto-close:
@@ -92,10 +91,3 @@ jobs:
             git commit -m "자동: 대시보드 리빌드 ($(date +%Y-%m-%d))"
             git push
           fi
-
-      - name: Trigger change-alert (마감 처리된 항목 알림)
-        if: steps.commit-data.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh workflow run change-alert.yml -f reason=auto-close
