@@ -4196,7 +4196,7 @@
       "공모전",
       "이벤트"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
