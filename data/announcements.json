@@ -5743,5 +5743,39 @@
     "result": null,
     "resultAt": null,
     "closed": false
+  },
+  {
+    "id": 226,
+    "title": "2026 국악공연 길라잡이 육성 교육과정 참가자 모집 (휴먼스케일콘서트 쇼케이스·마케팅 실습, 1인 제작지원금 200만원)",
+    "org": "전통공연예술진흥재단",
+    "type": "교육/기획양성",
+    "target": "개인 (공고일 기준 만 43세 이하 국악인·공연예술인, 20명 이내)",
+    "deadline": "2026-10-08(목) ~ 2026-10-23(금) 17:00 (이메일 도착분에 한함)",
+    "deadlineDate": "2026-10-23",
+    "openDate": "2026-10-08",
+    "relevance": "low",
+    "verified": true,
+    "verifySource": "전통공연예술진흥재단 공모 게시판 원문(게시 2026-10-08, 진행사항 '진행중') 본문 열람 (2026-10-10 일일수집·M6)",
+    "verifyUrl": "https://kotpa.org/ucms/bbs/B0000021/view.do?menuNo=300008&nttId=25324&pageIndex=1",
+    "applyUrl": "이메일 접수 rakkong@kotpa.org (메일 제목 '[국악공연 길라잡이] 성명_지원신청서', HWP/PDF)",
+    "qualification": "1982.10.9. 이후 출생 예술인 중 ①국악 전공·실연 가능 국악인 또는 ②공연 연출·안무 경험 공연예술인. 서류심사 선발, 결과 2026-10-27 예정(개별 문자). 전 7회 필수 참석. 문의 가치확산팀 02-580-3284",
+    "qualifyFit": "maybe",
+    "budget": "수강료 무료 + 참가자 1인 제작지원금 200만원 (전 과정 이수·쇼케이스 참여 조건, 12월 지급, 세금·고용보험 공제)",
+    "budgetScale": "small",
+    "budgetNote": "교육 2026-10-29~12-07 총 7회(국립국악원·전통공연창작마루), 12/7 쇼케이스 발표",
+    "note": "🆕 신규 (2026-10-10 일일수집·M6). 단체 아닌 개인 대상 — 세종국악관현악단 단원(만 43세 이하) 개인 참여 가능. 8월 '비즈니스 랩 STEP 1'(id 128) 후속 과정",
+    "tags": [
+      "교육",
+      "기획",
+      "개인",
+      "KOTPA",
+      "쇼케이스"
+    ],
+    "closed": false,
+    "decision": null,
+    "decisionAt": null,
+    "result": null,
+    "resultAt": null,
+    "confirmedSourceUrl": null
   }
 ]
