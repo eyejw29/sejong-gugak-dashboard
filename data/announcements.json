@@ -6218,5 +6218,40 @@
     "result": null,
     "resultAt": null,
     "closed": false
+  },
+  {
+    "id": 240,
+    "title": "김희수아트센터 SPACE1 대관 지원 2027 1차 공모 (전통예술 창작 신작·재공연, 공연장 무료 대관)",
+    "org": "수림문화재단 (김희수아트센터, 서울)",
+    "type": "대관지원(무료)",
+    "target": "전통예술(국악·연희·한국무용 등)을 동시대적으로 해석한 신작·재공연 작품 — 전통예술(창작) 공연 제작·주관 3회 이상 경력의 전문 예술인·단체",
+    "deadline": "2026-10-15 ~ 2026-11-09",
+    "deadlineDate": "2026-11-09",
+    "openDate": "2026-10-15",
+    "relevance": "high",
+    "verified": true,
+    "verifySource": "수림문화재단 공식 누리집 공지(2026-10-14 게시) 원문 직접 확인 + 모모365 게재본(2026-10-18) 교차 (2026-10-21 일일수집·M6)",
+    "verifyUrl": "https://soorimcf.or.kr/notice/content/view?code=NOT264240942JHILL7927&pageLimit=10&menuId=content&menuSubId001=content&menuSubId002=&categoryCode=NOTI001",
+    "applyUrl": "이메일 접수 application@surimcf.or.kr (원문 표기 그대로, 메일제목·파일명 '2027 S1 대관 지원 신청_단체(예술가)명'), 신청서식 수림문화재단 누리집 다운로드, 문의 070-4912-8442 / sysy@surimcf.or.kr",
+    "qualification": "필수 제출: 신청서·개인정보 동의서 / 선택: 공연 영상 링크·대본·소개자료. 55분 이상 창작 초연 또는 재공연, 구체적 계획 필요. 제외: 상업·종교 목적, 소속 인원 대상 발표회, 최근 3년 내 공연 경력 없는 단체. 결과 11/11 이후 개별 연락",
+    "qualifyFit": "세종국악관현악단이 전통예술 창작 공연 3회 이상 경력이면 지원 가능. 단 블랙박스 약 100석 — 관현악 대편성보다는 소편성·실내악 프로젝트에 적합",
+    "budget": "공연장(SPACE1)·부대시설·기본장비 무료 대관",
+    "budgetScale": "현물(대관료 면제)",
+    "budgetNote": "공연 제작·운영비는 단체 부담, 홍보물에 수림문화재단 후원 명시. 티켓 수익은 단체 귀속, 타 지원사업 병행 가능(사전 확인)",
+    "note": "🆕 신규 (2026-10-21 일일수집·M6). 대관 가능 일정 2027년 1~3월(일·월 휴관, 월요일 셋업만). 첨부 hwpx 서식 미열람. 원문 내 도메인 표기가 soorimcf/surimcf 혼재 — 제출 전 이메일 주소 확인 권장",
+    "tags": [
+      "대관지원",
+      "무료대관",
+      "전통예술",
+      "창작",
+      "서울",
+      "2027상반기"
+    ],
+    "confirmedSourceUrl": null,
+    "decision": null,
+    "decisionAt": null,
+    "result": null,
+    "resultAt": null,
+    "closed": false
   }
 ]
