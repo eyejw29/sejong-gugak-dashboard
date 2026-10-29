@@ -6319,7 +6319,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 243,
