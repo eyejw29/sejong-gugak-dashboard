@@ -4539,7 +4539,7 @@
       "경기",
       "하반기"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4575,7 +4575,7 @@
       "우편접수",
       "60분"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4609,7 +4609,7 @@
       "서울",
       "2027"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4742,7 +4742,7 @@
       "인력풀",
       "충청권"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -5089,7 +5089,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 207,
@@ -5946,7 +5946,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 232,
@@ -6014,7 +6014,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 234,
@@ -6451,7 +6451,7 @@
     "result": null,
     "resultAt": null,
     "confirmedSourceUrl": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 247,
