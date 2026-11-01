@@ -2558,7 +2558,7 @@
       "단체",
       "기업협력"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -3863,7 +3863,7 @@
       "버스킹",
       "찾아가는공연"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -4953,7 +4953,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 203,
@@ -5322,7 +5322,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 214,
