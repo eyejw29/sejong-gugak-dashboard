@@ -6853,5 +6853,38 @@
     "result": null,
     "resultAt": null,
     "closed": false
+  },
+  {
+    "id": 259,
+    "title": "2027년 장애예술 활성화 지원사업 (한국장애인문화예술원 — 창작 기반·창작 활동·교류·향유·유통 및 촉진 분야)",
+    "org": "(재)한국장애인문화예술원",
+    "type": "창작지원",
+    "target": "장애예술인·장애예술단체 및 사업유형별 지원자격에 해당하는 개인·단체",
+    "deadline": "2026-10-30 ~ 2026-12-04 18:00 (NCAS 온라인)",
+    "deadlineDate": "2026-12-04",
+    "openDate": "2026-10-30",
+    "relevance": "medium",
+    "verified": true,
+    "verifySource": "장문원 사업공고 게시글 원문 확인 (2026-11-03 M6 일일수집, 등록 2026-10-30). NCAS 공모 게시판 4588번 교차 확인. 사업유형별 지원자격·지원규모는 첨부 안내서(PDF) 미열람 — 모름",
+    "verifyUrl": "https://kdac.or.kr/board/read?boardManagementNo=29&boardNo=4496&level=2&menuNo=45",
+    "applyUrl": "https://www.ncas.or.kr/",
+    "qualification": "원문: 장애예술인·장애예술단체 및 사업유형별 지원자격에 해당하는 개인·단체. 비장애 단체가 신청 가능한 유형(향유 활동 등)이 있는지는 안내서 미열람 — 모름",
+    "qualifyFit": "check",
+    "budget": "미확인",
+    "budgetScale": "미확인",
+    "budgetNote": "사업유형별 지원규모는 지원신청 안내서 확인 필요(미열람)",
+    "note": "🆕 신규 (2026-11-03 M6 일일수집). 심의: 대면심의 대상 발표 2027-01-11, 최종 선정 2027-02-05 18:00(예정). 사업설명회 2026-11-09(월) 13:00 이음센터 5층(이음온라인 2차 출처), 질의응답소 11/2~11/11(장문원 게시판 목록 2차 확인). 세종국악관현악단의 무장애(배리어프리) 사업 이력과 맞닿는 분야 — 비장애 단체 신청 가능 유형 여부가 1차 확인 사항",
+    "tags": [
+      "장애예술",
+      "배리어프리",
+      "NCAS",
+      "2027"
+    ],
+    "closed": false,
+    "decision": null,
+    "decisionAt": null,
+    "result": null,
+    "resultAt": null,
+    "confirmedSourceUrl": null
   }
 ]
