@@ -5526,7 +5526,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 220,
@@ -5563,7 +5563,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 221,
@@ -5599,7 +5599,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 222,
@@ -5636,7 +5636,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 223,
@@ -5671,7 +5671,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 224,
@@ -5707,7 +5707,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 225,
@@ -5742,7 +5742,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 226,
@@ -5912,7 +5912,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 231,
@@ -6149,7 +6149,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 238,
