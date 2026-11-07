@@ -4575,7 +4575,7 @@
       "우편접수",
       "60분"
     ],
-    "closed": false,
+    "closed": true,
     "decision": null,
     "decisionAt": null,
     "result": null,
@@ -5356,7 +5356,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": false
+    "closed": true
   },
   {
     "id": 215,
