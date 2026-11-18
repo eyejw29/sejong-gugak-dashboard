@@ -5810,7 +5810,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": true
+    "closed": false
   },
   {
     "id": 228,
@@ -5878,7 +5878,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": true
+    "closed": false
   },
   {
     "id": 230,
@@ -6920,7 +6920,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": true
+    "closed": false
   },
   {
     "id": 261,
@@ -7057,7 +7057,7 @@
     "decisionAt": null,
     "result": null,
     "resultAt": null,
-    "closed": true
+    "closed": false
   },
   {
     "id": 265,
